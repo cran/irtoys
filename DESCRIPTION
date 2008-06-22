@@ -1,8 +1,8 @@
 Package: irtoys
 Type: Package
 Title: Simple interface to the estimation and plotting of IRT models
-Version: 0.1.0
-Date: 2006-08-22
+Version: 0.1.1
+Date: 2008-06-22
 Author: Ivailo Partchev
 Maintainer: Ivailo Partchev <Ivailo.Partchev@uni-jena.de>
 Description: Provides a simple common interface to the estimation of item parameters
@@ -11,4 +11,4 @@ Description: Provides a simple common interface to the estimation of item parame
 License: GPL version 2 or newer
 Depends: sm, ltm
 Suggests: MASS
-Packaged: Tue May  8 12:12:24 2007; Ivo
+Packaged: Tue Jun 24 13:34:33 2008; Ivo

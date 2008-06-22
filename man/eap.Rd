@@ -3,7 +3,7 @@
 \title{EAP estimation of ability}
 \description{
 Estimates the expectation of the posterior distribution
-of the latent variable ("ability") for each person.}
+of the latent variable ("ability") for each person.
 }
 \usage{
 eap(resp, ip, qu)

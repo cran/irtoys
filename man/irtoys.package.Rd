@@ -30,12 +30,22 @@ their syntax.
 To take full advantage of \code{irtoys}, one needs some IRT
 software. Package \code{ltm} is automatically loaded.  ICL 
 by Brad Hanson can be downloaded from 
-his site, \url{www.b-a-h.com}. BILOG is commercial software sold
+his site, \url{www.b-a-h.com}. Executables are provided for Windows, 
+Linux, and Macintosh. On Windows, place \code{icl.exe} in a directory that is
+included in the PATH variable (\code{c:\windows} and the \code{R/bin} 
+directory are expected to always work). On Linux, place \code{icl} in the
+\code{/usr/bin/} directory, and make it executable. For Macintosh, please ask
+somebody who really knows.
+
+BILOG is commercial software sold
 by SSI --- see \url{www.ssicentral.com} for further detail. 
-On Windows, make sure that the executable files (\code{icl.exe} 
-for ICL, \code{blm1.exe}, \code{blm2.exe}, and \code{blm3.exe}, 
-for BILOG) are located in directories that are included in the 
-PATH variable.  
+On Windows, make sure that the three files \code{BLM1.EXE}, 
+\code{BLM2.EXE}, and \code{BLM3.EXE}, 
+for BILOG) are located in a directory that is
+included in the PATH variable (\code{c:\windows} and the \code{R/bin} 
+directory are expected to always work). On Linux, place the three files in the
+\code{/usr/bin/} directory, and make sure that \code{wine} is installed. 
+For Macintosh, please ask somebody who really knows.
 }
 \author{Ivailo Partchev <Ivailo.Partchev@uni-jena.de>}
 \references{

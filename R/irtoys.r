@@ -258,7 +258,7 @@ est.icl <- function(resp,model,nqp,est.distr,logistic,
   cat("write_item_param",p,"\n",file=f,append=TRUE)
   cat("write_latent_dist",paste(run.name,".icld",sep=""),"\n",file=f,append=TRUE)
   cat("release_items_dist\n",file=f,append=TRUE)
-  system(paste("icl",f),invisible=TRUE)
+  system(paste("icl",f))
   parms <- read.ip.icl(p)
   return(parms) 
 }
@@ -270,7 +270,7 @@ est.blm <- function(resp,model,nqp,est.distr,logistic,
   if (nit>9999) stop("cannot have more than 9999 items")
   f <- paste(run.name,".blm", sep="")
   d <- paste(run.name,".dat", sep="")
-  p <- paste(run.name,".blmp",sep="")
+  p <- paste(toupper(run.name),".BLMP",sep="")
   np <- nrow(resp)
   if (np>999999) stop("cannot have more than 999999 observations")
   resp <- cbind(sprintf("%06d",1:np),resp)
@@ -306,9 +306,16 @@ est.blm <- function(resp,model,nqp,est.distr,logistic,
   if (m>2 && !c.prior) cat("   NOGprior,\n",file=f,append=TRUE) 
   cat("   CYCles = 3000,\n",sep="",file=f,append=TRUE)
   cat("   NEWton = 0;\n",file=f,append=TRUE)
-  system(paste("blm1",run.name),invisible=TRUE)
-  system(paste("blm2",run.name),invisible=TRUE)
-  system(paste("blm3",run.name),invisible=TRUE)
+  if (Sys.info()["sysname"]=="Linux") {
+  	system(paste("wine","/usr/bin/BLM1.EXE",run.name))
+  	system(paste("wine","/usr/bin/BLM2.EXE",run.name))
+  	system(paste("wine","/usr/bin/BLM3.EXE",run.name))
+  } 
+  	else {
+  	system(paste("blm1",run.name))
+  	system(paste("blm2",run.name))
+  	system(paste("blm3",run.name))
+  }
   parms <- read.ip.bilog(p)
   return(parms)  
 }
@@ -339,7 +346,7 @@ est <- function(resp, model="2PL", engine="icl", nqp=20, est.distr=FALSE,
   bilog.defaults=TRUE, rasch=FALSE, run.name="mymodel") {
   res <- switch(engine,
     "icl"=  est.icl(resp, model, nqp, est.distr, logistic, nch, a.prior, b.prior, c.prior, bilog.defaults, run.name),
-    "bilog"=est.blm(resp, model, nqp, est.distr, logistic, nch, a.prior, b.prior, c.prior, bilog.defaults, run.name),
+    "bilog"=est.blm(resp, model, nqp, est.distr, logistic, nch, a.prior, b.prior, c.prior, bilog.defaults, run.name, rasch),
     "ltm"=  est.ltm(resp, model, nqp, logistic, rasch),
     {
       warning(paste("unknown engine",engine,"using icl instead"))
