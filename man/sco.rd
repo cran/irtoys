@@ -6,11 +6,12 @@ Given a key, score a multiple choice test, i.e. recode the original
 choices to right (1) or wrong (0). Missing responses are treated as
 wrong.}
 \usage{
-sco(choices, key)
+sco(choices, key, na.false=FALSE)
 }
 \arguments{
   \item{choices}{The original responses to the items in the test: persons as rows, items as columns. May contain NA.}
   \item{key}{A vector containing the key (correct answers) to the items in \code{choices}. If not given, the function will check if all data are either 0, 1, or NA: if yes, NA are recoded as 0, else an error message is returned.}
+  \item{na.false}{Recode non-responses to false responses?}
 }
 \author{Ivailo Partchev}
 \examples{

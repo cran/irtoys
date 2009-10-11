@@ -4,6 +4,10 @@
 \alias{est.icl}
 \alias{est.ltm}
 \alias{eap.one}
+\alias{mle.one}
+\alias{dpv.one}
+\alias{like}
+\alias{ddf}
 \alias{simple.scale}
 \alias{adv.scale}
 \alias{hb}

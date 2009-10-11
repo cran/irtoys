@@ -20,32 +20,28 @@ non-parametric approaches are implemented in TestGraf,
 transformation to a common scale needs ST, and so on. Some
 programs, such as ICL, have no graphical capabilities at all,
 while others offer stunning interactive graphics but refuse to
-output a Postscript file. Package \code{irtoys} provides a common
+output a Postscript file. 
+
+Package \code{irtoys} provides a common
 interface to some of the most basic functions in ICL, BILOG, and 
 \R's own \code{ltm}, some of the functionality of TestGraf and ST,
 and a variety of other functions. Those who want to take advantage
 of the full functionality of ICL, BILOG & Co. must still master
 their syntax.
 
-To take full advantage of \code{irtoys}, one needs some IRT
-software. Package \code{ltm} is automatically loaded.  ICL 
-by Brad Hanson can be downloaded from 
-his site, \url{www.b-a-h.com}. Executables are provided for Windows, 
-Linux, and Macintosh. On Windows, place \code{icl.exe} in a directory that is
-included in the PATH variable (\code{c:\windows} and the \code{R/bin} 
-directory are expected to always work). On Linux, place \code{icl} in the
-\code{/usr/bin/} directory, and make it executable. For Macintosh, please ask
-somebody who really knows.
+To take full advantage of \code{irtoys}, some IRT
+software is needed. Package \code{ltm} is automatically loaded.  ICL 
+by Brad Hanson can be downloaded from his site, \url{www.b-a-h.com}: 
+executables are provided for Windows, Linux, and Macintosh. BILOG 
+is commercial software sold by SSI --- see \url{www.ssicentral.com} 
+for further detail.
 
-BILOG is commercial software sold
-by SSI --- see \url{www.ssicentral.com} for further detail. 
-On Windows, make sure that the three files \code{BLM1.EXE}, 
-\code{BLM2.EXE}, and \code{BLM3.EXE}, 
-for BILOG) are located in a directory that is
-included in the PATH variable (\code{c:\windows} and the \code{R/bin} 
-directory are expected to always work). On Linux, place the three files in the
-\code{/usr/bin/} directory, and make sure that \code{wine} is installed. 
-For Macintosh, please ask somebody who really knows.
+On Windows, make sure that the executable files (\code{icl.exe} for ICL,
+\code{BLM1.EXE}, \code{BLM2.EXE}, and \code{BLM3.EXE} for BILOG) 
+are located in a directory that is included in the PATH variable. 
+On Linux, the default directory for the BILOG files is now \code{~/.wine/drive_c/}; 
+because BILOG is a Windows program, \code{wine} must be installed. On Macintosh, at least 
+\code{ltm} should work.
 }
 \author{Ivailo Partchev <Ivailo.Partchev@uni-jena.de>}
 \references{

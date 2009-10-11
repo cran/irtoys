@@ -7,7 +7,7 @@ of freedom and p-value. Optionally produces a plot.
 }
 \usage{
 itf(resp, ip, item, stat = "lr", theta, groups, 
-  do.plot = TRUE, main = "Item fit")
+  standardize=TRUE, mu=0, sigma=1, do.plot = TRUE, main = "Item fit")
 }
 \arguments{
   \item{resp}{A matrix of responses: persons as rows, items as columns, 
@@ -27,6 +27,9 @@ itf(resp, ip, item, stat = "lr", theta, groups,
   \item{groups}{An object produced by function \code{grp}. 
     If not given, \code{grp} will be applied on \code{theta} with its 
     default values.}
+  \item{standardize}{Standardize the distribution of ability estimates?} 
+  \item{mu}{Mean of the standardized distribution of ability estimates} 
+  \item{sigma}{Standard deviation of the standardized distribution of ability estimates} 
   \item{do.plot}{Whether to do a plot}
   \item{main}{The title of the plot if one is desired}
 }

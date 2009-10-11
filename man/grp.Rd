@@ -8,13 +8,14 @@ histogram-like object. Typically invoked by function
 non-default settings. 
 }
 \usage{
-grp(theta, bin.type = "quant", bin.numb = 10, ref.type = "meds")
+grp(theta, bins=9, breaks=NULL, equal="count", type="meds")
 }
 \arguments{
   \item{theta}{The latent variable estimates to be binned}
-  \item{bin.type}{One of \code{"autom"}, \code{"gauss"}, or \code{"quant"}. \code{"autom"} uses the algorithm of \code{hist()}, producing bins with highly variable frequencies. \code{"gauss"} and \code{"quant"} try to produce groups of roughly equal size. \code{"gauss"} assumes a Normal distribution while \code{"quant"} is based on the empirical quantiles. Default is \code{"quant"}}
-  \item{bin.numb}{The number of bins (only a suggestion when \code{bin.type="autom"})}
-  \item{ref.type}{The points at which \code{itf} will evaluate the IRF. One of \code{"mids"} (the mid-point of each bin), \code{"meds"} (the median of the values in the bin), or \code{"means"} (the mean of the values in the bin). Default is \code{"meds"}. When \code{"bin.type=autom"}, \code{"meds"} defaults to \code{"mids"}}
+  \item{bins}{Desired number of bins}
+  \item{breaks}{A vector of cutpoints. Overrides \code{bins} if present.}
+  \item{equal}{Either \code{"width"} for bins of equal width, or \code{"count"} for bins with roughly counts of observations. Default is \code{"quant"}}
+  \item{type}{The points at which \code{itf} will evaluate the IRF. One of \code{"mids"} (the mid-point of each bin), \code{"meds"} (the median of the values in the bin), or \code{"means"} (the mean of the values in the bin). Default is \code{"meds"}.}
 }
 \value{
 A list of:
@@ -28,6 +29,6 @@ A list of:
 data(Scored)
 p.2pl  <- est(Scored, model="2PL", engine="ltm")
 th.mle <- mlebme(resp=Scored, ip=p.2pl)
-gr     <- grp(th.mle, bin.numb=7)
+gr     <- grp(th.mle, bins=7)
 }
 \keyword{models}

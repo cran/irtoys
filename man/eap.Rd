@@ -15,7 +15,7 @@ eap(resp, ip, qu)
   [,3] asymptote \eqn{c}. }
   \item{qu}{A quadrature object produced with \code{\link{normal.qu}} or read in with \code{\link{read.qu.icl}}}
 }
-\value{A matrix with the ability estimates in column 1 and their standard errors of measurement (SEM) in column 2}
+\value{A matrix with the ability estimates in column 1, and their standard errors of measurement (SEM) in column 2, and the number of non-missing reponses in column 3}
 %\references{}
 \author{Ivailo Partchev}
 \seealso{\code{\link{mlebme}}, \code{\link{normal.qu}}, \code{\link{read.qu.icl}}}
