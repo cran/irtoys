@@ -107,24 +107,25 @@ plot.tif = function(x, add=FALSE, main="Test information function", co=1, ...) {
 # r=responses, p=parm list, x=ability, mu, sigma
 llf = function(x,r,p,mu,sigma,method) {
 	pr = p[,3] + (1.0 - p[,3])/(1.0 + exp(p[,1]*(p[,2] - x)))
+	pr = pmax(pr, .00001); pr = pmin(pr, .99999)
 	ll = r*log(pr) + (1-r)*log(1.0-pr)
 	lf = sum(ll)
 	if (method != "ML") lf = lf + log(dnorm(x,mu,sigma)) 
   return(lf)
 } 
 
-mle.one = function(resp, ip, mu=mu, sigma=sigma, method=method) {
-  cc = !is.na(resp)
-  resp = resp[cc]
-  ip   = ip[cc,]
-  n    = length(resp)
-  if (n < 1) return(c(NA, NA, 0))
-  est  = optimize(llf, lower=-4, upper=4, maximum=TRUE, 
-    r=resp, p=ip, mu=mu, sigma=sigma, method=method)$maximum
-  ti  = tif(ip,est)$f
-  if (method != "ML") ti = ti + 1/(sigma*sigma)
-  sem = sqrt(1/ti)
-  return(c(est, sem, n))
+mle.one = function(resp, ip, mu=mu, sigma=sigma, method=method) {                                                            
+    cc = !is.na(resp)                                        
+    resp = resp[cc]                                          
+    ip = ip[cc, , drop=FALSE]                                             
+    n = length(resp)                                         
+    if (n < 1) return(c(NA, NA, 0))                                 
+    est = optimize(llf, lower = -4, upper = 4, maximum = TRUE, 
+        r = resp, p = ip, mu = mu, sigma = sigma, method = method)$maximum
+    ti = tif(ip, est)$f
+    if (method != "ML") ti = ti + 1/(sigma * sigma)
+    sem = sqrt(1/ti)
+    return(c(est, sem, n))
 }
 
 # 3PL MLE/BME ability estimates, direct optimization
@@ -144,7 +145,7 @@ mlebme = function(resp, ip, mu=0, sigma=1, method="ML") {
 eap.one = function(r, p, qp, qw) {
   cc = !is.na(r)
   r  = r[cc]
-  p  = p[cc,]
+  p  = p[cc,,drop=FALSE]
   n  = length(r)
   if (n < 1) return(c(NA, NA, 0))
   ll = sapply(qp, llf, r=r, p=p, mu=NULL, sigma=NULL, method="ML")
@@ -171,6 +172,7 @@ eap = function(resp, ip, qu) {
 
 like = function(x, r, p, mu=0, s=1, log=FALSE, post=TRUE) {
   pr = irf(p,x)$f
+	pr = pmax(pr, .00001); pr = pmin(pr, .99999)
   ll = log(pr) %*% r + log(1 - pr) %*% (1-r)
   if (post) 
     if (log) ll=ll+dnorm(x,mu,s,log=TRUE) else ll=exp(ll)*dnorm(x,mu,s)
@@ -277,8 +279,8 @@ read.resp = function(file, na=".") {
 }
 
 # prepare and run an ICL setup, return parameter estimates
-est.icl = function(resp,model,nqp,est.distr,logistic,
-  nch,a.prior,b.prior,c.prior,bilog.defaults,run.name) {
+est.icl = function(resp, model, nqp, est.distr, logistic,
+  nch, a.prior, b.prior, c.prior, bilog.defaults, run.name) {
   nit = ncol(resp)
   f = paste(run.name,".tcl", sep="")
   d = paste(run.name,".dat", sep="")
@@ -325,8 +327,8 @@ est.icl = function(resp,model,nqp,est.distr,logistic,
 }
 
 # prepare and run a BILOG setup, return parameter estimates
-est.blm = function(resp,model,nqp,est.distr,logistic,
-  nch,a.prior,b.prior,c.prior,bilog.defaults,run.name,rasch) {
+est.blm = function(resp, model, nqp, est.distr, logistic,
+  nch, a.prior, b.prior, c.prior, bilog.defaults, run.name, rasch) {
   nit = ncol(resp)
   if (nit>9999) stop("cannot have more than 9999 items")
   f = paste(run.name,".blm", sep="")
@@ -372,11 +374,10 @@ est.blm = function(resp,model,nqp,est.distr,logistic,
   cat("   CYCles = 3000,\n",sep="",file=f,append=TRUE)
   cat("   NEWton = 0;\n",file=f,append=TRUE)
   if (Sys.info()["sysname"]=="Linux") {
-  	system(paste("wine","~/.wine/drive_c/BLM1.EXE",run.name))
-  	system(paste("wine","~/.wine/drive_c/BLM2.EXE",run.name))
-  	system(paste("wine","~/.wine/drive_c/BLM3.EXE",run.name))
-  } 
-  	else {
+  	system(paste("wine","BLM1.EXE",run.name))
+  	system(paste("wine","BLM2.EXE",run.name))
+  	system(paste("wine","BLM3.EXE",run.name))
+  } else {
   	system(paste("blm1",run.name))
   	system(paste("blm2",run.name))
   	system(paste("blm3",run.name))
@@ -386,7 +387,7 @@ est.blm = function(resp,model,nqp,est.distr,logistic,
 }
 
 # prepare and run an LTM setup, return parameter estimates
-est.ltm = function(resp,model,nqp,logistic,rasch) {
+est.ltm = function(resp, model, nqp, logistic, rasch) {
   library(ltm)
   nit = ncol(resp)
   switch(model,
@@ -470,7 +471,7 @@ sca = function(old.ip, new.ip, old.items, new.items,
     "MS"= simple.scale(sp,np,mm=FALSE),
     "MM"= simple.scale(sp,np,mm=TRUE),
     "HB"= adv.scale(sp,np,old.qu,new.qu,haeb=TRUE),
-    "LS"= adv.scale(sp,np,old.qu,haeb=FALSE),
+    "SL"= adv.scale(sp,np,old.qu,haeb=FALSE),
     stop(paste("unknown scaling method",method))
   )
   new.ip[,1] = new.ip[,1] / r$A
@@ -611,6 +612,7 @@ tgp = function(choices, key, item,
 api = function(resp, ip){
   th = mlebme(resp, ip)[,1]
   p = irf(ip, th)$f
+	p = pmax(p, .00001); pr = pmin(p, .99999)
   if(is.null(dim(p))) p=matrix(p,ncol=length(p))
   q = 1 - p
   lp= log(p)
@@ -635,3 +637,17 @@ tsc = function(ip, theta){
    se = jb*theta[,2]
    cbind(sc,se)
 }
+
+scp = function(resp, ip, theta=NULL) {
+  if (is.null(theta)) theta=mlebme(resp,ip)
+	or = order(theta[,1])
+	theta = theta[or,]
+  ts = tsc(ip, theta)
+	os = apply(resp, 1, sum, na.rm=TRUE)
+	os = os[or]
+	plot(theta[,1], ts[,1], type="l", lwd = 2, xlab="Estimated ability", ylab="Score",
+		main="Observed and predicted scores")
+	points(theta[,1], ts[,1]-ts[,2], type="l")
+	points(theta[,1], ts[,1]+ts[,2], type="l")
+	points(theta[,1], os, co="red")
+}  

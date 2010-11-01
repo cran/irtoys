@@ -4,10 +4,7 @@
 \docType{package}
 \title{Estimate and plot IRT models bor binary responses}
 \description{
-Provides a common interface to the estimation of item parameters
-in IRT models for binary responses with three different programs 
-(ICL, BILOG, and \code{ltm}, and a variety of functions useful
-with IRT models. 
+Provides a common interface to the estimation of item parameters in IRT models for binary responses with three different programs (ICL, BILOG, and \code{ltm}, and a variety of functions useful with IRT models. 
 }
 \details{
 The \code{irtoys} package contains a bunch of functions 
@@ -39,11 +36,14 @@ for further detail.
 On Windows, make sure that the executable files (\code{icl.exe} for ICL,
 \code{BLM1.EXE}, \code{BLM2.EXE}, and \code{BLM3.EXE} for BILOG) 
 are located in a directory that is included in the PATH variable. 
-On Linux, the default directory for the BILOG files is now \code{~/.wine/drive_c/}; 
-because BILOG is a Windows program, \code{wine} must be installed. On Macintosh, at least 
-\code{ltm} should work.
+On Linux, BILOG, being a Windows program, is run
+with \code{wine}, and should also be on a path where wine can find it. 
+On my machine, I have simply put the three files in
+\code{~/.wine/drive_c/windows/}. It seems that new versions of wine expect
+them to be explicitly tagged as executable. On Macintosh, at least 
+\code{ltm} should work in all cases.
 }
-\author{Ivailo Partchev <Ivailo.Partchev@uni-jena.de>}
+\author{Ivailo Partchev <partchev@gmail.com>}
 \references{
 S. E. Embretson and S. P. Reise (2000),
 Item Response Theory for Psychologists,
