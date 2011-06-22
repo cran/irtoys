@@ -8,7 +8,7 @@ Mean/Mean, Mean/Sigma, Lord-Stocking, and Haebara.
 }
 \usage{
 sca(old.ip, new.ip, old.items, new.items, 
-  old.qu = NULL, new.qu = NULL, method = "MS")
+  old.qu = NULL, new.qu = NULL, method = "MS", bec=FALSE)
 }
 \arguments{
   \item{old.ip}{A set of parameters that are already on the desired scale}
@@ -18,6 +18,7 @@ sca(old.ip, new.ip, old.items, new.items,
   \item{old.qu}{A quadrature object for \code{old.ip}, typically produced by the same program that estimated \code{old.ip}. Only needed if \code{method="LS"} or \code{method="HB"}}
   \item{new.qu}{A quadrature object for \code{new.ip}, typically produced by the same program that estimated \code{new.ip}. Only needed if \code{method="HB"}}
   \item{method}{One of "MM" (Mean/Mean), "MS" (Mean/Sigma), "SL" (Stocking-Lord), or "HB" (Haebara). Default is "MS"}
+  \item{bec}{Use back-equating correction? When TRUE, the Stocking-Lord or Hebaera procedures will be adjusted for back-equating (see Hebaera, 1980). Ignored when method is MM or MS. Default is FALSE.}
 }
 %\details{Add if not too lazy}
 \value{
@@ -27,14 +28,8 @@ A list of:
   \item{scaled.ip}{The parameters in \code{new.ip} tranformed to a scale that is compatible with \code{old.ip}}
 }
 \references{Kolen, M.J. & R.L. Brennan (1995) Test Equating: Methods and
-Practices. Springer.}
-\author{Ivailo Partchev}
-\note{
-Although the Stocking-Lord and the Haebara methods were programmed
-after Kolen & Brennan (1995), they do not produce the same results 
-as the program ST. Results for Stocking-Lord come closer to ST than
-those for the Haebara method.
-}
+Practices. Springer.\\Habaera, T. (1980) Equating logistic ability scales by a weighted lest squares method. Japanese Psychological Research, 22, p.144--149}
+\author{Ivailo Partchev and Tamaki Hattori}
 \examples{
 # a small simulation to demonstrate transformation to a common scale
 # fake 50 2PL items

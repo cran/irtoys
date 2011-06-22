@@ -3,8 +3,7 @@ irf = function(ip,x=NULL) {
   if (is.null(x)) x = seq(-4,4,length=101) 
   if (is.null(dim(ip))) dim(ip) = c(1,3)
   ni = dim(ip)[1]
-  f = (sapply(1:ni, function(i)
-    ip[i,3] + (1 - ip[i,3]) * plogis(x, ip[i,2], 1/ip[i,1])))
+  f = sapply(1:ni, function(i) ip[i,3] + (1.0 - ip[i,3]) / (1.0 + exp(ip[i,1]*(ip[i,2] - x))))
   r = list(x=x, f=f) 
   class(r) = "irf"
   return(r)
@@ -170,6 +169,65 @@ eap = function(resp, ip, qu) {
   return(t(o))
 }
 
+# bias-corrected (Warm's) estimate for one person
+bce.one = function(resp, ip) {                                                            
+    cc = !is.na(resp)                                        
+    resp = resp[cc]                                          
+    ip = ip[cc, , drop=FALSE]                                             
+    n = length(resp)                                         
+    if (n < 1) return(c(NA, NA, 0))                                 
+    est = uniroot(scf, lower=-10, upper=10, r=resp, p=ip)$root		
+    ev = bcv(est, resp, ip)
+	return(c(est, sqrt(ev), n))
+}
+
+# variance of the Warm estimator
+bcv = function(x,r,p) {
+	three = any(p[,3] > 0)
+	pr = 1 / (1 + exp(p[,1]*(p[,2] - x)))
+	if (three) {
+		p3 = p[,3] + (1 - p[,3])*p
+		ii = p[,1]^2 / p3 * (1 - p3) * pr^2
+	} else {
+		ii = p[,1]^2 * pr * (1 - pr)
+	}
+	isum = sum(ii)
+	jsum = sum(ii * p[,1] * (1 - 2*pr))
+	return(1.0/isum + jsum^2 / (4 * isum^4))
+}
+	
+# score function (Warm's estimates for the 3PL 
+# are unwieldy for direct optimization so use 1st deriv)
+# r=responses, p=parm list, x=ability
+scf = function(x,r,p) {
+	three = any(p[,3] > 0)
+	lgt = exp(p[,1] * (x - p[,2]))
+	pr = lgt / (1 + lgt)
+	z = r - pr
+	if (three) z = z - p[,3]*r / (p[,3] + lgt)
+	sm = sum(p[,1]*z)
+	if (three) {
+		pr3 = p[,3] + (1 - p[,3])*pr
+		ii = p[,1]^2 / pr3 * (1 - pr3) * pr^2
+	} else {
+		ii = p[,1]^2 * pr * (1 - pr)
+	}
+	isum = sum(ii)
+	jsum = sum(ii * p[,1] * (1 - 2*pr))
+	return(sm + jsum / (isum*2))
+}
+
+# Bias-corrected (aka Warm's) ability estimates
+wle = function(resp, ip) {
+ if (is.null(dim(resp))) dim(resp) = c(1,length(resp))
+ if (is.null(dim(ip))) stop("item parameters not a matrix")
+ if (nrow(ip) != ncol(resp)) stop("responses - item parameters mismatch")
+ np = nrow(resp)
+ o = sapply(1:np, function(i) bce.one(resp=resp[i,], ip=ip))
+ rownames(o) = c("est","sem","n")
+ return(t(o)) 
+}
+
 like = function(x, r, p, mu=0, s=1, log=FALSE, post=TRUE) {
   pr = irf(p,x)$f
 	pr = pmax(pr, .00001); pr = pmin(pr, .99999)
@@ -216,7 +274,7 @@ dpv = function(resp, ip, mu=0, sigma=1, n=5) {
 
 # TestGraf style "abilities"  r is the response matrix
 qrs = function(resp) {
-  raw.scores = apply(resp, 1, sum)
+  raw.scores = apply(resp, 1, sum, na.rm=TRUE)
   ranks = rank(raw.scores, ties.method = "random")
   return(as.matrix(qnorm(ranks/(length(ranks)+1))))
 }
@@ -448,20 +506,66 @@ hb = function (x, sp, np, qp, qw) {
   return(sum(dif*dif*qw))
 }
 
+# versions with correction for back-equating
+sl2 <- function (x, sp, np, qp, qw){
+    A21 = x[1]
+    K21 = x[2]
+    A12 = 1/A21
+    K12 = -K21/A21
+    s = length(qp)/2
+    np21 = np
+    sp12 = sp
+    np21[, 1] = np21[, 1]/A21
+    np21[, 2] = np21[, 2]*A21 + K21
+    Q1 <- trf(ip = sp, x = qp[1:s])$f -
+          trf(ip = np21, x = qp[1:s])$f
+    sp12[, 1] = sp12[, 1]/A12
+    sp12[, 2] = sp12[, 2]*A12 + K12
+    Q2 <- trf(ip = sp12, x = qp[(s+1):(2*s)])$f -
+          trf(ip = np, x = qp[(s+1):(2*s)])$f
+    dif <- c(Q1, Q2)
+    return(sum(dif * dif * qw))
+}
+
+hb2 <- function (x, sp, np, qp, qw){
+    A21 = x[1]
+    K21 = x[2]
+    A12 = 1/A21
+    K12 = -K21/A21
+    s = length(qp)/2
+    np21 = np
+    sp12 = sp
+    np21[, 1] = np21[, 1]/A21
+    np21[, 2] = np21[, 2]*A21 + K21
+    Q1 <- irf(ip = sp, x = qp[1:s])$f -
+          irf(ip = np21, x = qp[1:s])$f
+    sp12[, 1] = sp12[, 1]/A12
+    sp12[, 2] = sp12[, 2]*A12 + K12
+    Q2 <- irf(ip = sp12, x = qp[(s+1):(2*s)])$f -
+          irf(ip = np, x = qp[(s+1):(2*s)])$f
+    dif <- rbind(Q1, Q2)
+    return(sum(dif * dif * qw))
+}
+
 # do Lord-Stocking or Haebara scaling, return transformation
-adv.scale = function(sp,np,sq=NULL,nq=NULL,haeb=FALSE) {
+adv.scale = function(sp,np,sq=NULL,nq=NULL,haeb=FALSE,bec=FALSE) {
   if (is.null(sq)) stop("no quadrature for characteristic curve method")
   if (is.null(nq) && haeb) stop("Haebara method needs both old and new quadrature")
   qp = if (haeb) c(sq$quad.points,  nq$quad.points)  else sq$quad.points
   qw = if (haeb) c(sq$quad.weights, nq$quad.weights) else sq$quad.weights
-  r  = if (haeb) optim(c(1,0),hb,method="BFGS",sp=sp,np=np,qp=qp,qw=qw) else
-                  optim(c(1,0),sl,method="BFGS",sp=sp,np=np,qp=qp,qw=qw)    
+  if (bec) {
+    r  = if (haeb) optim(c(1,0),hb2,method="BFGS",sp=sp,np=np,qp=qp,qw=qw) else
+      optim(c(1,0),sl2,method="BFGS",sp=sp,np=np,qp=qp,qw=qw)    
+  } else {
+    r  = if (haeb) optim(c(1,0),hb,method="BFGS",sp=sp,np=np,qp=qp,qw=qw) else
+      optim(c(1,0),sl,method="BFGS",sp=sp,np=np,qp=qp,qw=qw)    
+  }	  
   return(list(A=r$par[1],B=r$par[2])) 
 }
 
 # do one of four scaling methods, return transformation and scaled new parms
 sca = function(old.ip, new.ip, old.items, new.items,
-  old.qu=NULL, new.qu=NULL, method="MS") {
+  old.qu=NULL, new.qu=NULL, method="MS", bec=FALSE) {
   if (length(old.items)  != length(new.items)) stop("no of common items does not match")
   if (!all(old.items %in% 1:nrow(old.ip))) stop("bad index for some scaled item")
   if (!all(new.items %in% 1:nrow(new.ip))) stop("bad index for some new item")
@@ -470,8 +574,8 @@ sca = function(old.ip, new.ip, old.items, new.items,
   r = switch(method,
     "MS"= simple.scale(sp,np,mm=FALSE),
     "MM"= simple.scale(sp,np,mm=TRUE),
-    "HB"= adv.scale(sp,np,old.qu,new.qu,haeb=TRUE),
-    "SL"= adv.scale(sp,np,old.qu,haeb=FALSE),
+    "HB"= adv.scale(sp,np,old.qu,new.qu,haeb=TRUE,bec=bec),
+    "SL"= adv.scale(sp,np,old.qu,haeb=FALSE,bec=bec),
     stop(paste("unknown scaling method",method))
   )
   new.ip[,1] = new.ip[,1] / r$A
