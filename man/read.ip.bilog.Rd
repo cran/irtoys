@@ -1,13 +1,6 @@
 \name{read.ip.bilog}
 \alias{read.ip.bilog}
 \title{Read in parameter estimates}
-\description{
-From BILOG output, read in estimates of item parameters.
-Invoked automatically when the model is estimated via
-\code{irtoys}. If that is not the case, \code{file} 
-must be a file produced with the \code{>SAVE PARm file;}
-command in BILOG.
-}
 \usage{
 read.ip.bilog(file)
 }
@@ -15,11 +8,21 @@ read.ip.bilog(file)
   \item{file}{File name}
 }
 \value{
-A matrix with one row per item, and three columns: [,1] item
-discrimination \eqn{a}, [,2] item difficulty \eqn{b}, and
-[,3] asymptote \eqn{c}. For the 1PL and 2PL models, all 
-asymptotes are equal to 0; for the 1PL, the discriminations 
-are all equal but not necessarily equal to 1.
+  A matrix with one row per item, and three columns: [,1]
+  item discrimination \eqn{a}, [,2] item difficulty
+  \eqn{b}, and [,3] asymptote \eqn{c}. For the 1PL and 2PL
+  models, all asymptotes are equal to 0; for the 1PL, the
+  discriminations are all equal but not necessarily equal
+  to 1.
 }
-\author{Ivailo Partchev}
+\description{
+  From BILOG output, read in estimates of item parameters.
+  Invoked automatically when the model is estimated via
+  \code{irtoys}. If that is not the case, \code{file} must
+  be a file produced with the \code{>SAVE PARm file;}
+  command in BILOG.
+}
+\author{
+  Ivailo Partchev
+}
 \keyword{data}
