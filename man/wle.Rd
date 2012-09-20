@@ -2,7 +2,7 @@
 \alias{wle}
 \title{Bias-corrected (Warm's) estimates of ability}
 \usage{
-wle(resp, ip)
+  wle(resp, ip)
 }
 \arguments{
   \item{resp}{A matrix of responses: persons as rows, items
@@ -26,8 +26,8 @@ wle(resp, ip)
   responses.
 }
 \examples{
-p.2pl <- est(Scored, model = "2PL", engine = "ltm")
-th.bce <- wle(resp = Scored, ip = p.2pl)
+p.2pl <- est(Scored, model="2PL", engine="ltm")
+th.bce <- wle(resp=Scored, ip=p.2pl$est)
 }
 \author{
   Ivailo Partchev
@@ -41,3 +41,4 @@ th.bce <- wle(resp = Scored, ip = p.2pl)
   \code{\link{mlebme}}, \code{\link{eap}}
 }
 \keyword{models}
+

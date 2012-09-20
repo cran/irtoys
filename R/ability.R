@@ -93,7 +93,7 @@ normal.qu = function(n=15,lower=-4,upper=4,mu=0,sigma=1,scaling="points"){
 #' @examples
 #' 
 #' p.2pl  <- est(Scored, model="2PL", engine="ltm")
-#' th.mle <- mlebme(resp=Scored, ip=p.2pl)
+#' th.mle <- mlebme(resp=Scored, ip=p.2pl$est)
 #' 
 mlebme = function(resp, ip, mu=0, sigma=1, method="ML") {
  if (is.null(dim(resp))) dim(resp) = c(1,length(resp))
@@ -180,7 +180,7 @@ scf = function(x,re,p) {
 #' @examples
 #' 
 #' p.2pl <- est(Scored, model="2PL", engine="ltm")
-#' th.bce <- wle(resp=Scored, ip=p.2pl)
+#' th.bce <- wle(resp=Scored, ip=p.2pl$est)
 #' 
 wle = function(resp, ip) {
  if (is.null(dim(resp))) dim(resp) = c(1,length(resp))
@@ -233,7 +233,7 @@ eap.one = function(r, p, qp, qw) {
 #' @examples
 #' 
 #' p.2pl <- est(Scored, model="2PL", engine="ltm")
-#' th.eap <- eap(resp=Scored, ip=p.2pl, qu=normal.qu())
+#' th.eap <- eap(resp=Scored, ip=p.2pl$est, qu=normal.qu())
 #' 
 eap = function(resp, ip, qu) {
   if (is.null(dim(resp))) dim(resp) = c(1,length(resp))
@@ -306,7 +306,7 @@ dpv.one = function(resp, ip, n=5, mu, s) {
 #' @examples
 #' 
 #' p.2pl <- est(Scored, model="2PL", engine="ltm")
-#' plval <- dpv(resp=Scored, ip=p.2pl)
+#' plval <- dpv(resp=Scored, ip=p.2pl$est)
 #' 
 dpv = function(resp, ip, mu=0, sigma=1, n=5) {
  if (is.null(dim(resp))) dim(resp) = c(1,length(resp))

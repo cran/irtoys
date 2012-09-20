@@ -2,7 +2,7 @@
 \alias{eap}
 \title{EAP estimation of ability}
 \usage{
-eap(resp, ip, qu)
+  eap(resp, ip, qu)
 }
 \arguments{
   \item{resp}{A matrix of responses: persons as rows, items
@@ -27,8 +27,8 @@ eap(resp, ip, qu)
   of the latent variable ("ability") for each person.
 }
 \examples{
-p.2pl <- est(Scored, model = "2PL", engine = "ltm")
-th.eap <- eap(resp = Scored, ip = p.2pl, qu = normal.qu())
+p.2pl <- est(Scored, model="2PL", engine="ltm")
+th.eap <- eap(resp=Scored, ip=p.2pl$est, qu=normal.qu())
 }
 \author{
   Ivailo Partchev
@@ -38,3 +38,4 @@ th.eap <- eap(resp = Scored, ip = p.2pl, qu = normal.qu())
   \code{\link{read.qu.icl}}
 }
 \keyword{models}
+

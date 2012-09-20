@@ -134,10 +134,10 @@ adv.scale = function(sp,np,sq=NULL,nq=NULL,haeb=FALSE,bec=FALSE) {
 #' # plot difficulties to show difference in scale
 #' plot(c(-3,3), c(-3,3), ty="n", xlab="True",ylab="Estimated",
 #'    main="Achieving common scale")
-#' text(pa[1:30,2],  p.1[,2], 1:30)
-#' text(pa[21:50,2], p.2[,2], 21:50, co=2)
+#' text(pa[1:30,2],  p.1$est[,2], 1:30)
+#' text(pa[21:50,2], p.2$est[,2], 21:50, co=2)
 #' # scale with the default Mean/Sigma method
-#' pa.sc = sca(old.ip=p.1, new.ip=p.2, old.items=21:30, new.items=1:10)
+#' pa.sc = sca(old.ip=p.1$est, new.ip=p.2$est, old.items=21:30, new.items=1:10)
 #' # add difficulties of scaled items to plot
 #' text(pa[21:50,2], pa.sc$scaled.ip[,2], 21:50, co=3)
 #' 

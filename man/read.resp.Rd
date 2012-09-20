@@ -2,7 +2,7 @@
 \alias{read.resp}
 \title{Read responses from a file}
 \usage{
-read.resp(file, na = ".")
+  read.resp(file, na = ".")
 }
 \arguments{
   \item{file}{File name}
@@ -41,7 +41,7 @@ read.resp(file, na = ".")
 }
 \examples{
 \dontrun{
-r <- read.resp("c:/myfiles/irt.dat")
+  r <- read.resp("c:/myfiles/irt.dat")
 }
 }
 \author{
@@ -51,3 +51,4 @@ r <- read.resp("c:/myfiles/irt.dat")
   \code{\link{sco}}, \code{\link{tgp}},
 }
 \keyword{IO}
+

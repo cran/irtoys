@@ -1,35 +1,4 @@
-#' Bin the latent variable estimates
-#' 
-#' Groups a vector of estimates of the latent variable into a histogram-like
-#' object. Typically invoked by function \code{itf}, unless the user wishes to
-#' access some of the non-default settings.
-#' 
-#' 
-#' @param theta The latent variable estimates to be binned
-#' @param bins Desired number of bins
-#' @param breaks A vector of cutpoints. Overrides \code{bins} if present.
-#' @param equal Either \code{"width"} for bins of equal width, or
-#' \code{"count"} for bins with roughly counts of observations. Default is
-#' \code{"quant"}
-#' @param type The points at which \code{itf} will evaluate the IRF. One of
-#' \code{"mids"} (the mid-point of each bin), \code{"meds"} (the median of the
-#' values in the bin), or \code{"means"} (the mean of the values in the bin).
-#' Default is \code{"meds"}.
-#' @return A list of: \item{breaks}{The breaks between adjacent bins}
-#' \item{counts}{The number of values in each bin} \item{ref}{Depending on
-#' \code{ref.type}, the mids of the bin, or the mean or median of the values in
-#' the bin}
-#' @author Ivailo Partchev
-#' @seealso \code{\link{itf}}
-#' @keywords models
-#' @export
-#' @examples
-#' 
-#' p.2pl  <- est(Scored, model="2PL", engine="ltm")
-#' th.mle <- mlebme(resp=Scored, ip=p.2pl)
-#' gr     <- grp(th.mle, bins=7)
-#' 
-grp = function(theta, bins=9, breaks=NULL, equal="count", type="meds") {
+grp = function(theta, bins=9, breaks=NULL, equal="count", type="means") {
   if (!is.null(dim(theta))) theta = theta[,1]
   if (is.null(breaks)) {
     if (equal=="count") {
@@ -52,7 +21,7 @@ grp = function(theta, bins=9, breaks=NULL, equal="count", type="meds") {
     meds = tapply(theta, grmemb, median),
     means= tapply(theta, grmemb, mean)
   )
-  return(list(breaks=breaks,counts=counts,ref=ref))
+  return(list(breaks=breaks,counts=counts,ref=ref,grmemb=grmemb))
 }
 # compute an item fit statistic with df and pval.
 # Optionally plot the IRF with residuals shown
@@ -92,21 +61,13 @@ grp = function(theta, bins=9, breaks=NULL, equal="count", type="meds") {
 #' with \code{stat="lr"} (or not specifying \code{stat} at all).
 #' 
 #' In the real world we can only work with estimates of ability, not with
-#' ability itself, so the approach is a bit circular in defining the groups.  I
-#' have tried to offer some extra flexibility with the arguments \code{theta}
-#' nor \code{group}: \itemize{ \item if neither \code{theta} nor \code{group}
-#' is specified, \code{item.test} will compute EAP estimates of ability for the
-#' proposed model, group them, and use medians for \code{"chi"} or means for
-#' \code{"lr"}. This is the approximate behaviour of BILOG (assuming
-#' \code{stat="lr"}). \item the EAP abilities can be overriden by computing
-#' some other ability estimates, or even the rank quantiles produced by
-#' \code{qrs} and passing them to \code{item.test} as \code{theta}. \item the
-#' default grouping (medians for \code{"chi"}, means for \code{"lr"}) can be
-#' overriden by preparing the groups with \code{grp} and passing them to
-#' \code{item.test} as \code{group}. In that case, \code{theta} is not needed.
-#' }
+#' ability itself. \code{irtoys} allows use of any suitable ability measure 
+#' via the argument \code{theta}. If \code{theta} is not specified, \code{itf} 
+#' will compute EAP estimates of ability, group them in 9 groups having 
+#' approximately the same number of cases, and use the means of the ability
+#' eatimates in each group. This is the approximate behaviour of BILOG. 
 #' 
-#' If the test has less than 20 items, \code{item.test} will issue a warning.
+#' If the test has less than 20 items, \code{itf} will issue a warning.
 #' For tests of 10 items or less, BILOG has a special statistic of fit, which
 #' can be found in the BILOG output. Also of interest is the fit in 2- and
 #' 3-way marginal tables in package \code{ltm}.
@@ -124,18 +85,25 @@ grp = function(theta, bins=9, breaks=NULL, equal="count", type="meds") {
 #' for the same persons whose responses are given in \code{resp}. If not given
 #' (and \code{group} is also missing), EAP estimates will be computed from
 #' \code{resp} and \code{ip}.
-#' @param groups An object produced by function \code{grp}.  If not given,
-#' \code{grp} will be applied on \code{theta} with its default values.
 #' @param standardize Standardize the distribution of ability estimates?
 #' @param mu Mean of the standardized distribution of ability estimates
 #' @param sigma Standard deviation of the standardized distribution of ability
 #' estimates
+#' @param bins Desired number of bins (default is 9)
+#' @param breaks A vector of cutpoints. Overrides \code{bins} if present.
+#' @param equal Either \code{"width"} for bins of equal width, or
+#' \code{"count"} for bins with roughly counts of observations. Default is
+#' \code{"quant"}
+#' @param type The points at which \code{itf} will evaluate the IRF. One of
+#' \code{"mids"} (the mid-point of each bin), \code{"meds"} (the median of the
+#' values in the bin), or \code{"means"} (the mean of the values in the bin).
+#' Default is \code{"means"}.
 #' @param do.plot Whether to do a plot
 #' @param main The title of the plot if one is desired
-#' @return A list of: \item{statistic}{The value of the statistic of item fit}
-#' \item{dfr}{The degrees of freedom} \item{pvalue}{The p-value}
+#' @return A vector of three numbers: \item{Statistic}{The value of the statistic of item fit}
+#' \item{DF}{The degrees of freedom} \item{P-value}{The p-value}
 #' @author Ivailo Partchev
-#' @seealso \code{\link{grp}}, \code{\link{eap}}, \code{\link{qrs}}
+#' @seealso \code{\link{eap}}, \code{\link{qrs}}
 #' @references S. E. Embretson and S. P. Reise (2000), Item Response Theory for
 #' Psychologists, Lawrence Erlbaum Associates, Mahwah, NJ
 #' 
@@ -147,35 +115,29 @@ grp = function(theta, bins=9, breaks=NULL, equal="count", type="meds") {
 #' @examples
 #' 
 #' p.2pl <- est(Scored, model="2PL", engine="ltm")
-#' fit   <- itf(resp=Scored, ip=p.2pl, item=7)
+#' fit   <- itf(resp=Scored, ip=p.2pl$est, item=7)
 #' 
-itf = function(resp, ip, item, stat = "lr", theta, groups,
-  standardize=TRUE, mu=0, sigma=1, do.plot=TRUE, main="Item fit") {
-# expected prop of correct answers at the mids of the histogram
-  if (missing(theta)) theta = eap(resp, ip, normal.qu())
-  if (missing(groups)) {
-    groups = switch(stat,
-      "chi" = grp(theta),
-      "lr"  = grp(theta, type="means"),
-      stop("unknown statistic")
-    )
-  }
-  if (nrow(ip)<20) warning("item fit statistic computed for a test of less than 20 items")
+itf = function(resp, ip, item, stat = "lr", theta,
+  standardize=TRUE, mu=0, sigma=1, 
+  bins = 9, breaks = NULL, equal = "count", type = "means",
+  do.plot=TRUE, main="Item fit") {
   if (!(item %in% 1:nrow(ip))) stop("bad item number")
+  if (nrow(ip)<20) warning("item fit statistic computed for a test of less than 20 items")
+  if (missing(theta)) theta = eap(resp, ip, normal.qu())
+  if (!is.null(dim(theta))) theta = theta[, 1]
   pa = ip[item,]
   iresp = resp[,item]
   oo = !is.na(iresp)
   iresp = iresp[oo]
-  theta = theta[oo,]
+  theta = theta[oo]
   if (standardize) theta = scale(theta)*sigma + mu
+  groups = grp(theta, bins=bins, breaks=breaks, equal=equal, type=type)
   ep = as.vector(irf(ip=pa, x=groups$ref)$f)
   nn = groups$counts
-# observed prop of correct answers in each bin
-  gr =  findInterval(theta[,1], groups$breaks, rightmost.closed=TRUE) * iresp
+  gr = groups$grmemb * iresp
   rg = tabulate(gr[gr>0], nbins=length(nn))
   op = rg / nn
-# calc number of parameters
-  npar = 3 - (pa[3]==0) - (pa[1]==1)
+  npar = 3 - (all(ip[,3]==0)) - (var(ip[,1])==0)
   if (stat=="chi") tst = sum((op-ep)^2/(ep*(1-ep))*nn)
   else {
     cmp = rg*log(op/ep)+(nn-rg)*log((1-op)/(1-ep))
@@ -190,7 +152,9 @@ itf = function(resp, ip, item, stat = "lr", theta, groups,
     points(groups$ref, op)
     plot(irf(pa),add=TRUE)
   }
-  return(list(statistic=tst,dfr=dfr,pval=pval))
+  result = c(tst,dfr,pval)
+  names(result) = c("Statistic","DF","P-value")
+  result
 }
 
 
@@ -204,6 +168,8 @@ itf = function(resp, ip, item, stat = "lr", theta, groups,
 #' @param ip Item parameters: a matrix with one row per item, and three
 #' columns: [,1] item discrimination \eqn{a}, [,2] item difficulty \eqn{b}, and
 #' [,3] asymptote \eqn{c}.
+#' @param theta A measure of ability, typically produced with \code{mlebme}, 
+#' \code{wle} etc. If missing, ML estimates will be computed automatically.
 #' @return A vector of length equal to the number of rows in \code{resp},
 #' containing the appropriateness indices
 #' @author Ivailo Partchev
@@ -216,11 +182,12 @@ itf = function(resp, ip, item, stat = "lr", theta, groups,
 #' @examples
 #' 
 #' p.2pl <- est(Scored, model="2PL", engine="ltm")
-#' api(Scored, p.2pl)
+#' api(Scored, p.2pl$est)
 #' 
-api = function(resp, ip){
-  th = mlebme(resp, ip)[,1]
-  p = irf(ip, th)$f
+api = function(resp, ip, theta){
+  if(missing(theta)) theta = mlebme(resp, ip)
+  if (!is.null(dim(theta))) theta = theta[, 1]
+  p = irf(ip, theta)$f
 	p = pmax(p, .00001); pr = pmin(p, .99999)
   if(is.null(dim(p))) p=matrix(p,ncol=length(p))
   q = 1 - p

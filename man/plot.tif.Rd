@@ -2,7 +2,8 @@
 \alias{plot.tif}
 \title{A plot method for test information functions}
 \usage{
-\method{plot}{tif}(x, add = FALSE, main = "Test information function", co = 1, ...)
+  \method{plot}{tif} (x, add = FALSE,
+    main = "Test information function", co = 1, ...)
 }
 \arguments{
   \item{x}{An object produced by function \code{tif}}
@@ -25,8 +26,8 @@
   unless something special is required.
 }
 \examples{
-p.2pl <- est(Scored, model = "2PL", engine = "ltm")
-plot(tif(p.2pl))
+p.2pl  <- est(Scored, model="2PL", engine="ltm")
+plot(tif(p.2pl$est))
 }
 \author{
   Ivailo Partchev
@@ -35,3 +36,4 @@ plot(tif(p.2pl))
   \code{\link{tif}}
 }
 \keyword{models}
+

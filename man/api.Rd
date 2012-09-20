@@ -2,7 +2,7 @@
 \alias{api}
 \title{The Z3 appropriateness index}
 \usage{
-api(resp, ip)
+  api(resp, ip, theta)
 }
 \arguments{
   \item{resp}{A matrix of responses: persons as rows, items
@@ -12,6 +12,10 @@ api(resp, ip)
   item, and three columns: [,1] item discrimination
   \eqn{a}, [,2] item difficulty \eqn{b}, and [,3] asymptote
   \eqn{c}.}
+
+  \item{theta}{A measure of ability, typically produced
+  with \code{mlebme}, \code{wle} etc. If missing, ML
+  estimates will be computed automatically.}
 }
 \value{
   A vector of length equal to the number of rows in
@@ -22,8 +26,8 @@ api(resp, ip)
   person fit in IRT models
 }
 \examples{
-p.2pl <- est(Scored, model = "2PL", engine = "ltm")
-api(Scored, p.2pl)
+p.2pl <- est(Scored, model="2PL", engine="ltm")
+api(Scored, p.2pl$est)
 }
 \author{
   Ivailo Partchev
@@ -35,3 +39,4 @@ api(Scored, p.2pl)
   of Mathematical and Statistical Psychology, 38, 67--80
 }
 \keyword{models}
+

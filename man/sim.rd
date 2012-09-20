@@ -2,7 +2,7 @@
 \alias{sim}
 \title{Simulate response data}
 \usage{
-sim(ip, x = NULL)
+  sim(ip, x = NULL)
 }
 \arguments{
   \item{ip}{Item parameters: a matrix with one row per
@@ -21,10 +21,11 @@ sim(ip, x = NULL)
   Simulate responses from the 1PL, 2PL, or 3PL model
 }
 \examples{
-pa <- cbind(runif(20, 0.8, 2), runif(20, -2.4, 2.4), rep(0, 50))
-rs <- sim(ip = pa, x = rnorm(1000))
+pa <- cbind(runif(20,.8,2), runif(20,-2.4,2.4), rep(0,50))
+rs <- sim(ip=pa, x=rnorm(1000))
 }
 \author{
   Ivailo Partchev
 }
 \keyword{models}
+

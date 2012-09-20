@@ -98,7 +98,7 @@ tia = function(choices, key, ...) {
   itr = lapply(1:nc, function(i) {
     mmx = model.matrix(~0+as.factor(choices[,i]))
 	  pvl = colMeans(mmx)
-    itc = cor(cbind(sumsc[!is.na(choices[,i])], mmx))[1,-1]
+    itc = cor(sumsc[!is.na(choices[,i])], mmx)
     px = rep("", ncol(mmx)); px[key[i]]="*"
     res = rbind(pvl,itc)
     attr(res,"dimnames") = list(c("Rel. frequency","Cor. with sum"),
@@ -109,7 +109,7 @@ tia = function(choices, key, ...) {
   k = nrow(sx)
   alpha = k/(k-1)*(1-sum(diag(sx))/sum(sx))
   pva = colMeans(scres, na.rm=T)
-  rit = cor(cbind(sumsc,scres),use="complete")[-1,1]
+  rit = cor(scres,sumsc, use="complete")
   diagx = sum(diag(sx)) - diag(sx)
   csumx = sum(sx) - 2*colSums(sx) - diag(sx)
   alpha.drop = (k-1)/(k-2)*(1-diagx/csumx)
@@ -118,26 +118,3 @@ tia = function(choices, key, ...) {
   list(testlevel=list(alpha=alpha),itemlevel=tsk,optionlevel=itr)
 }
 
-
-#' Transform a list of lists... to a matrix
-#' 
-#' When using \code{lapply} or \code{sapply} to avoid explicit loops, one often
-#' ends up with complex structures represening lists of lists of lists...
-#' Function \code{l2m} tries to transform such a structure into a matrix with a
-#' column for each distinct name in the list.
-#' 
-#' 
-#' @param x A list of lists...
-#' @return A matrix with a column for each distinct name in the list
-#' @author Ivailo Partchev
-#' @keywords list
-#' @export
-l2m = function(x) {
-  unx = unlist(x)
-  m = NULL
-  nam = unique(names(unx))
-  for (i in nam) m = cbind(m,unx[names(unx)==i])
-  rownames(m) = NULL
-  colnames(m) = nam
-  return(m)
-}

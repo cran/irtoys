@@ -2,7 +2,7 @@
 \alias{sco}
 \title{Score a multiple choice test}
 \usage{
-sco(choices, key, na.false = FALSE)
+  sco(choices, key, na.false = FALSE)
 }
 \arguments{
   \item{choices}{The original responses to the items in the
@@ -26,9 +26,10 @@ sco(choices, key, na.false = FALSE)
   responses are treated as wrong.
 }
 \examples{
-res <- sco(Unscored, key = c(2, 3, 1, 1, 4, 1, 2, 1, 2, 3, 3, 4, 3, 4, 2, 2, 4, 3))
+res <- sco(Unscored, key=c(2,3,1,1,4,1,2,1,2,3,3,4,3,4,2,2,4,3))
 }
 \author{
   Ivailo Partchev
 }
 \keyword{models}
+

@@ -2,8 +2,8 @@
 \alias{sca}
 \title{Linear transformation of the IRT scale}
 \usage{
-sca(old.ip, new.ip, old.items, new.items, old.qu = NULL, new.qu = NULL, method = "MS", 
-    bec = FALSE)
+  sca(old.ip, new.ip, old.items, new.items, old.qu = NULL,
+    new.qu = NULL, method = "MS", bec = FALSE)
 }
 \arguments{
   \item{old.ip}{A set of parameters that are already on the
@@ -50,22 +50,24 @@ sca(old.ip, new.ip, old.items, new.items, old.qu = NULL, new.qu = NULL, method =
   and Haebara.
 }
 \examples{
-# a small simulation to demonstrate transformation to a common scale fake 50 2PL items
-pa <- cbind(runif(50, 0.8, 2), runif(50, -2.4, 2.4), rep(0, 50))
-# simulate responses with two samples of different ability levels
-r.1 <- sim(ip = pa[1:30, ], x = rnorm(1000, -0.5))
-r.2 <- sim(ip = pa[21:50, ], x = rnorm(1000, 0.5))
+# a small simulation to demonstrate transformation to a common scale
+# fake 50 2PL items
+pa <- cbind(runif(50,.8,2), runif(50,-2.4,2.4), rep(0,50))
+# simulate responses with  two samples of different ability levels
+r.1 <- sim(ip=pa[1:30,],  x=rnorm(1000,-.5))
+r.2 <- sim(ip=pa[21:50,], x=rnorm(1000,.5))
 # estimate item parameters
-p.1 <- est(r.1, engine = "ltm")
-p.2 <- est(r.2, engine = "ltm")
+p.1 <- est(r.1, engine="ltm")
+p.2 <- est(r.2, engine="ltm")
 # plot difficulties to show difference in scale
-plot(c(-3, 3), c(-3, 3), ty = "n", xlab = "True", ylab = "Estimated", main = "Achieving common scale")
-text(pa[1:30, 2], p.1[, 2], 1:30)
-text(pa[21:50, 2], p.2[, 2], 21:50, co = 2)
+plot(c(-3,3), c(-3,3), ty="n", xlab="True",ylab="Estimated",
+   main="Achieving common scale")
+text(pa[1:30,2],  p.1$est[,2], 1:30)
+text(pa[21:50,2], p.2$est[,2], 21:50, co=2)
 # scale with the default Mean/Sigma method
-pa.sc = sca(old.ip = p.1, new.ip = p.2, old.items = 21:30, new.items = 1:10)
+pa.sc = sca(old.ip=p.1$est, new.ip=p.2$est, old.items=21:30, new.items=1:10)
 # add difficulties of scaled items to plot
-text(pa[21:50, 2], pa.sc$scaled.ip[, 2], 21:50, co = 3)
+text(pa[21:50,2], pa.sc$scaled.ip[,2], 21:50, co=3)
 }
 \author{
   Ivailo Partchev and Tamaki Hattori
@@ -79,3 +81,4 @@ text(pa[21:50, 2], pa.sc$scaled.ip[, 2], 21:50, co = 3)
   Research, 22, p.144--149
 }
 \keyword{models}
+

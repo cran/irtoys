@@ -2,8 +2,9 @@
 \alias{plot.iif}
 \title{A plot method for item information functions}
 \usage{
-\method{plot}{iif}(x, add = FALSE, main = "Item information function", co = 1, label = FALSE, 
-    ...)
+  \method{plot}{iif} (x, add = FALSE,
+    main = "Item information function", co = 1,
+    label = FALSE, ...)
 }
 \arguments{
   \item{x}{An object produced by function \code{iif}}
@@ -29,11 +30,11 @@
   unless something special is required.
 }
 \examples{
-p.2pl <- est(Scored, model = "2PL", engine = "ltm")
+p.2pl  <- est(Scored, model="2PL", engine="ltm")
 # plot IIF for all items in red, label with item number
-plot(iif(p.2pl), co = "red", label = TRUE)
+plot(iif(p.2pl$est), co="red", label=TRUE)
 # plot IIF for items 2, 3, and 7 in different colours
-plot(iif(p.2pl[c(2, 3, 7), ]), co = NA)
+plot(iif(p.2pl$est[c(2,3,7),]), co=NA)
 }
 \author{
   Ivailo Partchev
@@ -42,3 +43,4 @@ plot(iif(p.2pl[c(2, 3, 7), ]), co = NA)
   \code{\link{iif}}
 }
 \keyword{models}
+

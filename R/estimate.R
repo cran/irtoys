@@ -1,5 +1,5 @@
 # prepare and run an ICL setup, return parameter estimates
-est.icl = function(resp, model, nqp, est.distr, logistic,
+est.icl = function(resp, model, nqp, est.distr, 
   nch, a.prior, b.prior, c.prior, bilog.defaults, run.name) {
   nit = ncol(resp)
   f = paste(run.name,".tcl", sep="")
@@ -32,7 +32,7 @@ est.icl = function(resp, model, nqp, est.distr, logistic,
             cat("options -default_prior_c {beta",20*prb+1,20*(1-prb)+1,"0.0 1.0}\n",file=f,append=TRUE)
         }
   }
-  if (logistic) cat("options -D 1.0\n",file=f,append=TRUE)
+  cat("options -D 1.0\n",file=f,append=TRUE)
   cat("allocate_items_dist",nit,"-num_latent_dist_points",nqp,"\n",file=f,append=TRUE)  
   cat("read_examinees",d,paste(nit,"i1",sep=""),"\n",file=f,append=TRUE)
   cat("starting_values_dichotomous\n",file=f,append=TRUE)
@@ -47,7 +47,7 @@ est.icl = function(resp, model, nqp, est.distr, logistic,
 }
 
 # prepare and run a BILOG setup, return parameter estimates
-est.blm = function(resp, model, nqp, est.distr, logistic,
+est.blm = function(resp, model, nqp, est.distr,
   nch, a.prior, b.prior, c.prior, bilog.defaults, run.name, rasch) {
   nit = ncol(resp)
   if (nit>9999) stop("cannot have more than 9999 items")
@@ -67,7 +67,7 @@ est.blm = function(resp, model, nqp, est.distr, logistic,
   }
   cat(">GLOBAL DFName = '",d,"',\n",sep="",file=f,append=TRUE)
   cat("   NPArm = ",m,",\n",sep="",file=f,append=TRUE) 
-  if (logistic) cat("   LOGistic\n",file=f,append=TRUE)
+  cat("   LOGistic\n",file=f,append=TRUE)
   cat("   SAVE;\n",file=f,append=TRUE) 
   cat(">SAVE PARm = '",p,"';\n",sep="",file=f,append=TRUE)
   cat(">LENGTH NITems = (",nit,");\n",sep="",file=f,append=TRUE)   
@@ -107,7 +107,7 @@ est.blm = function(resp, model, nqp, est.distr, logistic,
 }
 
 # prepare and run an LTM setup, return parameter estimates
-est.ltm = function(resp, model, nqp, logistic, rasch) {
+est.ltm = function(resp, model, nqp, rasch) {
   library(ltm)
   nit = ncol(resp)
   switch(model,
@@ -119,10 +119,15 @@ est.ltm = function(resp, model, nqp, logistic, rasch) {
     stop(paste("model",model,"not supported in ltm"))
   )
   p = coef(m)
-  if (!logistic) p[,2] = p[,2]/1.7
   p = if(model=="3PL") cbind(p[,3], p[,2], p[,1]) else
-      cbind(p[,2],p[,1],rep(0,nit))      
-  return(p) 
+      cbind(p[,2],p[,1],0)    
+  q = summary(m)$coefficients[,2]
+  lq = length(q)
+  switch(model, `1PL` = se <- cbind(q[lq],q[-lq],0),
+     `2PL` = se <- cbind(matrix(q, ncol=2)[,c(2,1)],0),
+     `3PL` = se <- matrix(q,ncol=3)[,c(3,2,1)])
+  attr(se, "dimnames") = NULL
+  return(list(est=p, se=se)) 
 }
 
 
@@ -133,13 +138,16 @@ est.ltm = function(resp, model, nqp, logistic, rasch) {
 #' 
 #' Estimate the parameters of an IRT model defined in the most general case
 #' ("3PL") as
-#' \deqn{P(U_{ij}=1|\theta_i,a_j,b_j,c_j)=c_j+(1-c_j)\frac{\displaystyle\exp(Da_j(\theta_i-b_j))}{1+\displaystyle\exp(Da_j(\theta_i-b_j))}}
+#' \deqn{P(U_{ij}=1|\theta_i,a_j,b_j,c_j)=c_j+(1-c_j)\frac{\displaystyle\exp(a_j(\theta_i-b_j))}{1+\displaystyle\exp(a_j(\theta_i-b_j))}}
 #' where \eqn{U_{ij}} is a binary response given by person \eqn{i} to item
 #' \eqn{j}, \eqn{\theta_i} is the value of the latent variable ("ability") for
 #' person \eqn{i}, \eqn{a_j} is the discrimination parameter for item \eqn{j},
 #' \eqn{b_j} is the difficulty parameter for item \eqn{j}, \eqn{c_j} is the
-#' asymptote for item \eqn{j}, and \eqn{D} is a constant usually set to either
-#' 1.7 or 1.
+#' asymptote for item \eqn{j}.
+#'
+#' Some authors prefer to represent the model with a logit \eqn{1.7a^*_j(\theta_i-b_j)}
+#' rather than \eqn{a_j(\theta_i-b_j)}. This option has been removed from \code{irtoys}
+#' as it is not supported by the remaining functions of the package.  
 #' 
 #' In the 2PL model (\code{model="2PL"}), all asymptotes \eqn{c_j} are 0. In
 #' the 1PL model (\code{model="1PL"}), all asymptotes \eqn{c_j} are 0 and the
@@ -190,10 +198,6 @@ est.ltm = function(resp, model, nqp, logistic, rasch) {
 #' @param est.distr T if the probabilities of the latent distribution are to be
 #' estimated, F if a normal distribution is assumed. Default is F. Ignored when
 #' \code{engine="ltm"}.
-#' @param logistic \code{logistic=T} sets the constant D in the IRT model to 1
-#' ("logistic metric"), \code{logistic=F} sets it to 1.7. Default is T. When
-#' \code{engine="ltm"} and \code{logistic=T}, the estimated item
-#' discriminations are simply divided by 1.7.
 #' @param nch Number of choices in the original item formulation. Used to
 #' determine the prior for the asymptote when \code{engine="bilog"},
 #' \code{model="3PL"}, and \code{c.prior=T}. Default is 5.
@@ -216,10 +220,14 @@ est.ltm = function(resp, model, nqp, logistic, rasch) {
 #' written by ICL or BILOG. Default is \code{"mymodel"}. Change to something
 #' else to keep the outputs of ICL of BILOG for further use. Ignored when
 #' \code{engine="ltm"}
-#' @return A matrix with one row per item, and three columns: [,1] item
+#' @return A list with two elements, \code{est} and \code{se}, for the parameter 
+#' estimates and their standard errors, correspondingly. Each element is a  
+#' matrix with one row per item, and three columns: [,1] item
 #' discrimination \eqn{a}, [,2] item difficulty \eqn{b}, and [,3] asymptote
 #' \eqn{c}. For the 1PL and 2PL models, all asymptotes are equal to 0; for the
 #' 1PL, the discriminations are all equal but not necessarily equal to 1.
+#' When ICL is used as estimation engine, \code{se} is NULL as ICL does not
+#' compute standard errors for the item parameter estimates.
 #' @author Ivailo Partchev
 #' @references Bradley A. Hanson (2002), ICL: IRT Command Language.
 #' \url{www.b-a-h.com}
@@ -238,15 +246,15 @@ est.ltm = function(resp, model, nqp, logistic, rasch) {
 #' p.2pl <- est(Scored, model="2PL", engine="ltm")
 #' 
 est = function(resp, model="2PL", engine="icl", nqp=20, est.distr=FALSE,
-  logistic=TRUE, nch=5, a.prior=TRUE, b.prior=FALSE, c.prior=TRUE, 
+  nch=5, a.prior=TRUE, b.prior=FALSE, c.prior=TRUE, 
   bilog.defaults=TRUE, rasch=FALSE, run.name="mymodel") {
   res = switch(engine,
-    "icl"=  est.icl(resp, model, nqp, est.distr, logistic, nch, a.prior, b.prior, c.prior, bilog.defaults, run.name),
-    "bilog"=est.blm(resp, model, nqp, est.distr, logistic, nch, a.prior, b.prior, c.prior, bilog.defaults, run.name, rasch),
-    "ltm"=  est.ltm(resp, model, nqp, logistic, rasch),
+    "icl"=  est.icl(resp, model, nqp, est.distr, nch, a.prior, b.prior, c.prior, bilog.defaults, run.name),
+    "bilog"=est.blm(resp, model, nqp, est.distr, nch, a.prior, b.prior, c.prior, bilog.defaults, run.name, rasch),
+    "ltm"=  est.ltm(resp, model, nqp, rasch),
     {
       warning(paste("unknown engine",engine,"using icl instead"))
-      est.icl(resp,model, nqp, est.distr, logistic, nch, a.prior, b.prior, c.prior, bilog.defaults, run.name)      
+      est.icl(resp,model, nqp, est.distr, nch, a.prior, b.prior, c.prior, bilog.defaults, run.name)      
     }
   )
   return(res)

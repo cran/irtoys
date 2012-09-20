@@ -2,7 +2,7 @@
 \alias{trf}
 \title{Test response function}
 \usage{
-trf(ip, x = NULL)
+  trf(ip, x = NULL)
 }
 \arguments{
   \item{ip}{Item parameters: a matrix with one row per
@@ -30,8 +30,8 @@ trf(ip, x = NULL)
   of the TRF.
 }
 \examples{
-p.2pl <- est(Scored, model = "2PL", engine = "ltm")
-plot(trf(p.2pl))
+p.2pl  <- est(Scored, model="2PL", engine="ltm")
+plot(trf(p.2pl$est))
 }
 \author{
   Ivailo Partchev
@@ -40,3 +40,4 @@ plot(trf(p.2pl))
   \code{\link{plot.trf}}, \code{\link{irf}}
 }
 \keyword{models}
+

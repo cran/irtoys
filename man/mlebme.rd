@@ -2,7 +2,7 @@
 \alias{mlebme}
 \title{Maximum likelihood and Bayes Modal estimation of ability}
 \usage{
-mlebme(resp, ip, mu = 0, sigma = 1, method = "ML")
+  mlebme(resp, ip, mu = 0, sigma = 1, method = "ML")
 }
 \arguments{
   \item{resp}{A matrix of responses: persons as rows, items
@@ -35,8 +35,8 @@ mlebme(resp, ip, mu = 0, sigma = 1, method = "ML")
   for each person by direct optimization
 }
 \examples{
-p.2pl <- est(Scored, model = "2PL", engine = "ltm")
-th.mle <- mlebme(resp = Scored, ip = p.2pl)
+p.2pl  <- est(Scored, model="2PL", engine="ltm")
+th.mle <- mlebme(resp=Scored, ip=p.2pl$est)
 }
 \author{
   Ivailo Partchev
@@ -45,3 +45,4 @@ th.mle <- mlebme(resp = Scored, ip = p.2pl)
   \code{\link{eap}}
 }
 \keyword{models}
+

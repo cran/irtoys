@@ -1,4 +1,4 @@
-#' Estimate and plot IRT models bor binary responses
+#' Estimate and plot IRT models for binary responses
 #' 
 #' \tabular{ll}{
 #' Package: \tab irtoys\cr
@@ -44,7 +44,16 @@
 #' files in \code{~/.wine/drive_c/windows/}. It seems that new versions of wine
 #' expect them to be explicitly tagged as executable. On Macintosh, at least
 #' \code{ltm} should work in all cases.
-#' 
+#'
+#' NOTE: Starting with version 0.1.6, function \code{est} returns a list of two
+#' matrices: \code{est} contains the parameter estimates and is thus identical
+#' to the output in earlier versions, and \code{se} contains the standard errors,
+#' in a similar format. Also, function \code{itf} now returns item fit statistics 
+#' as a vector rather than a list. Finally, since most of the functions in \code{irtoys}
+#' have been written with the "logistic" metric in mind (i.e., \eqn{a_j(\theta_i-b_j)}
+#' rather than \eqn{1.7a^*_j(\theta_i-b_j)}, function \code{est} now estimates item 
+#' parameters only in the logistic metric.
+#'   
 #' @name irtoys-package
 #' @aliases irtoys-package irtoys
 #' @docType package

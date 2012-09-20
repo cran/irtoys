@@ -2,8 +2,9 @@
 \alias{npp}
 \title{Non-parametric characteristic curves}
 \usage{
-npp(resp, x, items, from = -4, to = 4, co = 1, main = "Non-parametric response function", 
-    add = FALSE, bands = FALSE, label = FALSE)
+  npp(resp, x, items, from = -4, to = 4, co = 1,
+    main = "Non-parametric response function", add = FALSE,
+    bands = FALSE, label = FALSE)
 }
 \arguments{
   \item{resp}{A matrix of responses: persons as rows, items
@@ -49,14 +50,14 @@ npp(resp, x, items, from = -4, to = 4, co = 1, main = "Non-parametric response f
   \code{sm}.
 }
 \examples{
-p.2pl <- est(Scored, model = "2PL", engine = "ltm")
+p.2pl  <- est(Scored, model="2PL", engine="ltm")
 
 # plot items 1:5 in different colours, label
-npp(Scored, items = 1:5, co = NA, label = TRUE)
+npp(Scored, items=1:5, co=NA, label=TRUE)
 
 # For item 7, compare npp with the 2PL parametric IRF
-npp(Scored, items = 7, bands = TRUE)
-plot(irf(ip = p.2pl[7, ]), co = 3, add = TRUE)
+npp(Scored, items=7, bands=TRUE)
+plot(irf(ip=p.2pl$est[7,]), co=3, add=TRUE)
 }
 \author{
   Ivailo Partchev
@@ -71,3 +72,4 @@ plot(irf(ip = p.2pl[7, ]), co = 3, add = TRUE)
   \code{\link{plot.irf}}
 }
 \keyword{models}
+

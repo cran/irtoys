@@ -2,7 +2,7 @@
 \alias{irf}
 \title{Item response function}
 \usage{
-irf(ip, x = NULL)
+  irf(ip, x = NULL)
 }
 \arguments{
   \item{ip}{Item parameters: a matrix with one row per
@@ -23,14 +23,13 @@ irf(ip, x = NULL)
 \description{
   Returns the item response function of the 3PL (1PL, 2PL)
   model, the i.e. the probabilities defined by
-  \deqn{P(U_{ij}=1|\theta_i,a_j,b_j,c_j)=c_j+(1-c_j)\frac{\displaystyle\exp(Da_j(\theta_i-b_j))}{1+\displaystyle\exp(Da_j(\theta_i-b_j))}}
+  \deqn{P(U_{ij}=1|\theta_i,a_j,b_j,c_j)=c_j+(1-c_j)\frac{\displaystyle\exp(a_j(\theta_i-b_j))}{1+\displaystyle\exp(a_j(\theta_i-b_j))}}
   where \eqn{U_{ij}} is a binary response given by person
   \eqn{i} to item \eqn{j}, \eqn{\theta_i} is the value of
   the latent variable ("ability") for person \eqn{i},
   \eqn{a_j} is the discrimination parameter for item
   \eqn{j}, \eqn{b_j} is the difficulty parameter for item
-  \eqn{j}, \eqn{c_j} is the asymptote for item \eqn{j}, and
-  \eqn{D} is a constant usually set to either 1.7 or 1.
+  \eqn{j}, \eqn{c_j} is the asymptote for item \eqn{j}.
   Some authors call the IRF "the item characteristic
   curve".
 }
@@ -44,8 +43,8 @@ irf(ip, x = NULL)
   of the IRF.
 }
 \examples{
-p.2pl <- est(Scored, model = "2PL", engine = "ltm")
-plot(irf(p.2pl[1, ]))
+p.2pl  <- est(Scored, model="2PL", engine="ltm")
+plot(irf(p.2pl$est[1,]))
 }
 \author{
   Ivailo Partchev
@@ -54,3 +53,4 @@ plot(irf(p.2pl[1, ]))
   \code{\link{plot.irf}}
 }
 \keyword{models}
+

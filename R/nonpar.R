@@ -39,7 +39,7 @@
 #' 
 #' # For item 7, compare npp with the 2PL parametric IRF 
 #' npp(Scored, items=7, bands=TRUE)
-#' plot(irf(ip=p.2pl[7,]), co=3, add=TRUE)
+#' plot(irf(ip=p.2pl$est[7,]), co=3, add=TRUE)
 #' 
 npp = function(resp, x, items, from=-4, to=4, co=1, 
   main="Non-parametric response function", add=FALSE, bands=FALSE, label=FALSE) {

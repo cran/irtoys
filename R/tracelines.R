@@ -2,13 +2,12 @@
 #' 
 #' Returns the item response function of the 3PL (1PL, 2PL) model, the i.e. the
 #' probabilities defined by
-#' \deqn{P(U_{ij}=1|\theta_i,a_j,b_j,c_j)=c_j+(1-c_j)\frac{\displaystyle\exp(Da_j(\theta_i-b_j))}{1+\displaystyle\exp(Da_j(\theta_i-b_j))}}
+#' \deqn{P(U_{ij}=1|\theta_i,a_j,b_j,c_j)=c_j+(1-c_j)\frac{\displaystyle\exp(a_j(\theta_i-b_j))}{1+\displaystyle\exp(a_j(\theta_i-b_j))}}
 #' where \eqn{U_{ij}} is a binary response given by person \eqn{i} to item
 #' \eqn{j}, \eqn{\theta_i} is the value of the latent variable ("ability") for
 #' person \eqn{i}, \eqn{a_j} is the discrimination parameter for item \eqn{j},
 #' \eqn{b_j} is the difficulty parameter for item \eqn{j}, \eqn{c_j} is the
-#' asymptote for item \eqn{j}, and \eqn{D} is a constant usually set to either
-#' 1.7 or 1. Some authors call the IRF "the item characteristic curve".
+#' asymptote for item \eqn{j}. Some authors call the IRF "the item characteristic curve".
 #' 
 #' In the 2PL model (\code{model="2PL"}), all asymptotes \eqn{c_j} are 0. In
 #' the 1PL model (\code{model="1PL"}), all asymptotes \eqn{c_j} are 0 and the
@@ -33,7 +32,7 @@
 #' @examples
 #' 
 #' p.2pl  <- est(Scored, model="2PL", engine="ltm")
-#' plot(irf(p.2pl[1,]))
+#' plot(irf(p.2pl$est[1,]))
 #' 
 irf = function(ip,x=NULL) {
   if (is.null(x)) x = seq(-4,4,length=101) 
@@ -71,9 +70,9 @@ irf = function(ip,x=NULL) {
 #' 
 #' p.2pl  <- est(Scored, model="2PL", engine="ltm")
 #' # plot IRF for all items in red, label with item number
-#' plot(irf(p.2pl), co="red", label=TRUE)
+#' plot(irf(p.2pl$est), co="red", label=TRUE)
 #' # plot IRF for items 2, 3, and 7 in different colours
-#' plot(irf(p.2pl[c(2,3,7),]), co=NA)
+#' plot(irf(p.2pl$est[c(2,3,7),]), co=NA)
 #' 
 plot.irf = function(x,  
     add=FALSE, main="Item response function", co=1, label=FALSE, ...) {
@@ -115,7 +114,7 @@ plot.irf = function(x,
 #' @examples
 #' 
 #' p.2pl  <- est(Scored, model="2PL", engine="ltm")
-#' plot(trf(p.2pl))
+#' plot(trf(p.2pl$est))
 #' 
 trf = function(ip,x=NULL) {
   i = irf(ip,x)
@@ -149,7 +148,7 @@ trf = function(ip,x=NULL) {
 #' @examples
 #' 
 #' p.2pl  <- est(Scored, model="2PL", engine="ltm")
-#' plot(trf(p.2pl))
+#' plot(trf(p.2pl$est))
 #' 
 plot.trf = function(x, 
     add=FALSE, main="Test response function", co=1, ...) {
@@ -188,7 +187,7 @@ plot.trf = function(x,
 #' @examples
 #' 
 #' p.2pl  <- est(Scored, model="2PL", engine="ltm")
-#' plot(iif(p.2pl[1:3,]))
+#' plot(iif(p.2pl$est[1:3,]))
 #' 
 iif = function(ip, x=NULL) {
   if (is.null(dim(ip))) dim(ip) = c(1,3)
@@ -234,9 +233,9 @@ iif = function(ip, x=NULL) {
 #' 
 #' p.2pl  <- est(Scored, model="2PL", engine="ltm")
 #' # plot IIF for all items in red, label with item number
-#' plot(iif(p.2pl), co="red", label=TRUE)
+#' plot(iif(p.2pl$est), co="red", label=TRUE)
 #' # plot IIF for items 2, 3, and 7 in different colours
-#' plot(iif(p.2pl[c(2,3,7),]), co=NA)
+#' plot(iif(p.2pl$est[c(2,3,7),]), co=NA)
 #' 
 plot.iif = function(x,  
   add=FALSE, main="Item information function", co=1, label=FALSE, ...) {
@@ -280,7 +279,7 @@ plot.iif = function(x,
 #' @examples
 #' 
 #' p.2pl  <- est(Scored, model="2PL", engine="ltm")
-#' plot(trf(p.2pl))
+#' plot(trf(p.2pl$est))
 #' 
 tif = function(ip, x=NULL) {
   i = iif(ip, x)
@@ -314,7 +313,7 @@ tif = function(ip, x=NULL) {
 #' @examples
 #' 
 #' p.2pl  <- est(Scored, model="2PL", engine="ltm")
-#' plot(tif(p.2pl))
+#' plot(tif(p.2pl$est))
 #' 
 plot.tif = function(x, add=FALSE, main="Test information function", co=1, ...) {
   if (is.na(co)) co = 1
@@ -327,7 +326,7 @@ plot.tif = function(x, add=FALSE, main="Test information function", co=1, ...) {
 #' True scores with standard errors
 #' 
 #' Computes the IRT true scores (test response function at the estimated
-#' ability) and an estimate of their standard error via the delte theorem,
+#' ability) and an estimate of their standard error via the delta theorem,
 #' treating item parameters as known).
 #' 
 #' 
@@ -345,8 +344,8 @@ plot.tif = function(x, add=FALSE, main="Test information function", co=1, ...) {
 #' @examples
 #' 
 #' p.2pl <- est(Scored, model="2PL", engine="ltm")
-#' th <- mlebme(resp=Scored, ip=p.2pl)
-#' tsc(p.2pl, th)
+#' th <- mlebme(resp=Scored, ip=p.2pl$est)
+#' tsc(p.2pl$est, th)
 #' 
 tsc = function(ip, theta){
    p = irf(ip, theta[,1])$f
@@ -387,7 +386,7 @@ tsc = function(ip, theta){
 #' @examples
 #' 
 #' p.2pl <- est(Scored, model="2PL", engine="ltm")
-#' scp(Scored, p.2pl)
+#' scp(Scored, p.2pl$est)
 #' 
 scp = function(resp, ip, theta=NULL) {
   if (is.null(theta)) theta=mlebme(resp,ip)

@@ -2,7 +2,7 @@
 \alias{dpv}
 \title{Draw plausible values}
 \usage{
-dpv(resp, ip, mu = 0, sigma = 1, n = 5)
+  dpv(resp, ip, mu = 0, sigma = 1, n = 5)
 }
 \arguments{
   \item{resp}{A matrix of responses: persons as rows, items
@@ -31,8 +31,8 @@ dpv(resp, ip, mu = 0, sigma = 1, n = 5)
   posterior distribution of ability
 }
 \examples{
-p.2pl <- est(Scored, model = "2PL", engine = "ltm")
-plval <- dpv(resp = Scored, ip = p.2pl)
+p.2pl <- est(Scored, model="2PL", engine="ltm")
+plval <- dpv(resp=Scored, ip=p.2pl$est)
 }
 \author{
   Ivailo Partchev
@@ -41,3 +41,4 @@ plval <- dpv(resp = Scored, ip = p.2pl)
   \code{\link{mlebme}}, \code{\link{eap}}
 }
 \keyword{models}
+

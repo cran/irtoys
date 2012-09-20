@@ -2,7 +2,7 @@
 \alias{tsc}
 \title{True scores with standard errors}
 \usage{
-tsc(ip, theta)
+  tsc(ip, theta)
 }
 \arguments{
   \item{ip}{Item parameters: a matrix with one row per
@@ -20,13 +20,13 @@ tsc(ip, theta)
 \description{
   Computes the IRT true scores (test response function at
   the estimated ability) and an estimate of their standard
-  error via the delte theorem, treating item parameters as
+  error via the delta theorem, treating item parameters as
   known).
 }
 \examples{
-p.2pl <- est(Scored, model = "2PL", engine = "ltm")
-th <- mlebme(resp = Scored, ip = p.2pl)
-tsc(p.2pl, th)
+p.2pl <- est(Scored, model="2PL", engine="ltm")
+th <- mlebme(resp=Scored, ip=p.2pl$est)
+tsc(p.2pl$est, th)
 }
 \author{
   Ivailo Partchev
@@ -36,3 +36,4 @@ tsc(p.2pl, th)
   \code{\link{trf}}
 }
 \keyword{models}
+

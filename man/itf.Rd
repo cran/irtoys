@@ -2,7 +2,9 @@
 \alias{itf}
 \title{Test item fit}
 \usage{
-itf(resp, ip, item, stat = "lr", theta, groups, standardize = TRUE, mu = 0, sigma = 1, 
+  itf(resp, ip, item, stat = "lr", theta,
+    standardize = TRUE, mu = 0, sigma = 1, bins = 9,
+    breaks = NULL, equal = "count", type = "means",
     do.plot = TRUE, main = "Item fit")
 }
 \arguments{
@@ -28,10 +30,6 @@ itf(resp, ip, item, stat = "lr", theta, groups, standardize = TRUE, mu = 0, sigm
   is also missing), EAP estimates will be computed from
   \code{resp} and \code{ip}.}
 
-  \item{groups}{An object produced by function \code{grp}.
-  If not given, \code{grp} will be applied on \code{theta}
-  with its default values.}
-
   \item{standardize}{Standardize the distribution of
   ability estimates?}
 
@@ -41,14 +39,29 @@ itf(resp, ip, item, stat = "lr", theta, groups, standardize = TRUE, mu = 0, sigm
   \item{sigma}{Standard deviation of the standardized
   distribution of ability estimates}
 
+  \item{bins}{Desired number of bins (default is 9)}
+
+  \item{breaks}{A vector of cutpoints. Overrides
+  \code{bins} if present.}
+
+  \item{equal}{Either \code{"width"} for bins of equal
+  width, or \code{"count"} for bins with roughly counts of
+  observations. Default is \code{"quant"}}
+
+  \item{type}{The points at which \code{itf} will evaluate
+  the IRF. One of \code{"mids"} (the mid-point of each
+  bin), \code{"meds"} (the median of the values in the
+  bin), or \code{"means"} (the mean of the values in the
+  bin). Default is \code{"means"}.}
+
   \item{do.plot}{Whether to do a plot}
 
   \item{main}{The title of the plot if one is desired}
 }
 \value{
-  A list of: \item{statistic}{The value of the statistic of
-  item fit} \item{dfr}{The degrees of freedom}
-  \item{pvalue}{The p-value}
+  A vector of three numbers: \item{Statistic}{The value of
+  the statistic of item fit} \item{DF}{The degrees of
+  freedom} \item{P-value}{The p-value}
 }
 \description{
   Returns a statistic of item fit together with its degrees
@@ -90,33 +103,23 @@ itf(resp, ip, item, stat = "lr", theta, groups, standardize = TRUE, mu = 0, sigm
   \code{stat} at all).
 
   In the real world we can only work with estimates of
-  ability, not with ability itself, so the approach is a
-  bit circular in defining the groups.  I have tried to
-  offer some extra flexibility with the arguments
-  \code{theta} nor \code{group}: \itemize{ \item if neither
-  \code{theta} nor \code{group} is specified,
-  \code{item.test} will compute EAP estimates of ability
-  for the proposed model, group them, and use medians for
-  \code{"chi"} or means for \code{"lr"}. This is the
-  approximate behaviour of BILOG (assuming
-  \code{stat="lr"}). \item the EAP abilities can be
-  overriden by computing some other ability estimates, or
-  even the rank quantiles produced by \code{qrs} and
-  passing them to \code{item.test} as \code{theta}. \item
-  the default grouping (medians for \code{"chi"}, means for
-  \code{"lr"}) can be overriden by preparing the groups
-  with \code{grp} and passing them to \code{item.test} as
-  \code{group}. In that case, \code{theta} is not needed. }
+  ability, not with ability itself. \code{irtoys} allows
+  use of any suitable ability measure via the argument
+  \code{theta}. If \code{theta} is not specified,
+  \code{itf} will compute EAP estimates of ability, group
+  them in 9 groups having approximately the same number of
+  cases, and use the means of the ability eatimates in each
+  group. This is the approximate behaviour of BILOG.
 
-  If the test has less than 20 items, \code{item.test} will
-  issue a warning. For tests of 10 items or less, BILOG has
-  a special statistic of fit, which can be found in the
-  BILOG output. Also of interest is the fit in 2- and 3-way
+  If the test has less than 20 items, \code{itf} will issue
+  a warning. For tests of 10 items or less, BILOG has a
+  special statistic of fit, which can be found in the BILOG
+  output. Also of interest is the fit in 2- and 3-way
   marginal tables in package \code{ltm}.
 }
 \examples{
-p.2pl <- est(Scored, model = "2PL", engine = "ltm")
-fit <- itf(resp = Scored, ip = p.2pl, item = 7)
+p.2pl <- est(Scored, model="2PL", engine="ltm")
+fit   <- itf(resp=Scored, ip=p.2pl$est, item=7)
 }
 \author{
   Ivailo Partchev
@@ -132,6 +135,7 @@ fit <- itf(resp = Scored, ip = p.2pl, item = 7)
   International, Chicago, IL
 }
 \seealso{
-  \code{\link{grp}}, \code{\link{eap}}, \code{\link{qrs}}
+  \code{\link{eap}}, \code{\link{qrs}}
 }
 \keyword{models}
+

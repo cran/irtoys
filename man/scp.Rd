@@ -2,7 +2,7 @@
 \alias{scp}
 \title{Plot observed and predicted scores against ability}
 \usage{
-scp(resp, ip, theta = NULL)
+  scp(resp, ip, theta = NULL)
 }
 \arguments{
   \item{resp}{A matrix of binary responses to a test, with
@@ -28,8 +28,8 @@ scp(resp, ip, theta = NULL)
   shown in red.
 }
 \examples{
-p.2pl <- est(Scored, model = "2PL", engine = "ltm")
-scp(Scored, p.2pl)
+p.2pl <- est(Scored, model="2PL", engine="ltm")
+scp(Scored, p.2pl$est)
 }
 \author{
   Ivailo Partchev
@@ -39,3 +39,4 @@ scp(Scored, p.2pl)
   \code{\link{tsc}}, \code{\link{trf}}
 }
 \keyword{models}
+

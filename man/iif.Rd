@@ -2,7 +2,7 @@
 \alias{iif}
 \title{Item information function}
 \usage{
-iif(ip, x = NULL)
+  iif(ip, x = NULL)
 }
 \arguments{
   \item{ip}{Item parameters: a matrix with one row per
@@ -35,8 +35,8 @@ iif(ip, x = NULL)
   of the IIF.
 }
 \examples{
-p.2pl <- est(Scored, model = "2PL", engine = "ltm")
-plot(iif(p.2pl[1:3, ]))
+p.2pl  <- est(Scored, model="2PL", engine="ltm")
+plot(iif(p.2pl$est[1:3,]))
 }
 \author{
   Ivailo Partchev
@@ -45,3 +45,4 @@ plot(iif(p.2pl[1:3, ]))
   \code{\link{plot.iif}}, \code{\link{irf}}
 }
 \keyword{models}
+

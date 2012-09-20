@@ -2,9 +2,10 @@
 \alias{est}
 \title{Estimate item parameters}
 \usage{
-est(resp, model = "2PL", engine = "icl", nqp = 20, est.distr = FALSE, logistic = TRUE, 
-    nch = 5, a.prior = TRUE, b.prior = FALSE, c.prior = TRUE, bilog.defaults = TRUE, rasch = FALSE, 
-    run.name = "mymodel")
+  est(resp, model = "2PL", engine = "icl", nqp = 20,
+    est.distr = FALSE, nch = 5, a.prior = TRUE,
+    b.prior = FALSE, c.prior = TRUE, bilog.defaults = TRUE,
+    rasch = FALSE, run.name = "mymodel")
 }
 \arguments{
   \item{resp}{A matrix of responses: persons as rows, items
@@ -22,12 +23,6 @@ est(resp, model = "2PL", engine = "icl", nqp = 20, est.distr = FALSE, logistic =
   distribution are to be estimated, F if a normal
   distribution is assumed. Default is F. Ignored when
   \code{engine="ltm"}.}
-
-  \item{logistic}{\code{logistic=T} sets the constant D in
-  the IRT model to 1 ("logistic metric"), \code{logistic=F}
-  sets it to 1.7. Default is T. When \code{engine="ltm"}
-  and \code{logistic=T}, the estimated item discriminations
-  are simply divided by 1.7.}
 
   \item{nch}{Number of choices in the original item
   formulation. Used to determine the prior for the
@@ -65,12 +60,16 @@ est(resp, model = "2PL", engine = "icl", nqp = 20, est.distr = FALSE, logistic =
   \code{engine="ltm"}}
 }
 \value{
-  A matrix with one row per item, and three columns: [,1]
-  item discrimination \eqn{a}, [,2] item difficulty
-  \eqn{b}, and [,3] asymptote \eqn{c}. For the 1PL and 2PL
-  models, all asymptotes are equal to 0; for the 1PL, the
-  discriminations are all equal but not necessarily equal
-  to 1.
+  A list with two elements, \code{est} and \code{se}, for
+  the parameter estimates and their standard errors,
+  correspondingly. Each element is a matrix with one row
+  per item, and three columns: [,1] item discrimination
+  \eqn{a}, [,2] item difficulty \eqn{b}, and [,3] asymptote
+  \eqn{c}. For the 1PL and 2PL models, all asymptotes are
+  equal to 0; for the 1PL, the discriminations are all
+  equal but not necessarily equal to 1. When ICL is used as
+  estimation engine, \code{se} is NULL as ICL does not
+  compute standard errors for the item parameter estimates.
 }
 \description{
   Estimate IRT item parameters using either ICL, BILOG, or
@@ -80,14 +79,19 @@ est(resp, model = "2PL", engine = "icl", nqp = 20, est.distr = FALSE, logistic =
 \details{
   Estimate the parameters of an IRT model defined in the
   most general case ("3PL") as
-  \deqn{P(U_{ij}=1|\theta_i,a_j,b_j,c_j)=c_j+(1-c_j)\frac{\displaystyle\exp(Da_j(\theta_i-b_j))}{1+\displaystyle\exp(Da_j(\theta_i-b_j))}}
+  \deqn{P(U_{ij}=1|\theta_i,a_j,b_j,c_j)=c_j+(1-c_j)\frac{\displaystyle\exp(a_j(\theta_i-b_j))}{1+\displaystyle\exp(a_j(\theta_i-b_j))}}
   where \eqn{U_{ij}} is a binary response given by person
   \eqn{i} to item \eqn{j}, \eqn{\theta_i} is the value of
   the latent variable ("ability") for person \eqn{i},
   \eqn{a_j} is the discrimination parameter for item
   \eqn{j}, \eqn{b_j} is the difficulty parameter for item
-  \eqn{j}, \eqn{c_j} is the asymptote for item \eqn{j}, and
-  \eqn{D} is a constant usually set to either 1.7 or 1.
+  \eqn{j}, \eqn{c_j} is the asymptote for item \eqn{j}.
+
+  Some authors prefer to represent the model with a logit
+  \eqn{1.7a^*_j(\theta_i-b_j)} rather than
+  \eqn{a_j(\theta_i-b_j)}. This option has been removed
+  from \code{irtoys} as it is not supported by the
+  remaining functions of the package.
 
   In the 2PL model (\code{model="2PL"}), all asymptotes
   \eqn{c_j} are 0. In the 1PL model (\code{model="1PL"}),
@@ -143,8 +147,8 @@ est(resp, model = "2PL", engine = "icl", nqp = 20, est.distr = FALSE, logistic =
   that are included in the PATH variable.
 }
 \examples{
-p.1pl <- est(Scored, model = "1PL", engine = "ltm")
-p.2pl <- est(Scored, model = "2PL", engine = "ltm")
+p.1pl <- est(Scored, model="1PL", engine="ltm")
+p.2pl <- est(Scored, model="2PL", engine="ltm")
 }
 \author{
   Ivailo Partchev
@@ -162,3 +166,4 @@ p.2pl <- est(Scored, model = "2PL", engine = "ltm")
   International, Chicago, IL.  \url{www.ssicentral.com}
 }
 \keyword{models}
+

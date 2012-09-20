@@ -2,7 +2,7 @@
 \alias{tif}
 \title{Test information function}
 \usage{
-tif(ip, x = NULL)
+  tif(ip, x = NULL)
 }
 \arguments{
   \item{ip}{Item parameters: a matrix with one row per
@@ -32,8 +32,8 @@ tif(ip, x = NULL)
   of the TIF.
 }
 \examples{
-p.2pl <- est(Scored, model = "2PL", engine = "ltm")
-plot(trf(p.2pl))
+p.2pl  <- est(Scored, model="2PL", engine="ltm")
+plot(trf(p.2pl$est))
 }
 \author{
   Ivailo Partchev
@@ -42,3 +42,4 @@ plot(trf(p.2pl))
   \code{\link{plot.tif}}, \code{\link{iif}}
 }
 \keyword{models}
+

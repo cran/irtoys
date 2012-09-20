@@ -2,7 +2,9 @@
 \alias{tgp}
 \title{Non-parametric option curves}
 \usage{
-tgp(choices, key, item, main = "Non-parametric response function", co = 1, label = FALSE)
+  tgp(choices, key, item,
+    main = "Non-parametric response function", co = 1,
+    label = FALSE)
 }
 \arguments{
   \item{choices}{A matrix of responses to multiple-choice
@@ -32,8 +34,8 @@ tgp(choices, key, item, main = "Non-parametric response function", co = 1, label
   unlike those in Jim Ramsay's TestGraf program.
 }
 \examples{
-key = c(2, 3, 1, 1, 4, 1, 2, 1, 2, 3, 3, 4, 3, 4, 2, 2, 4, 3)
-tgp(choices = Unscored, key = key, item = 4, co = NA, label = TRUE)
+key=c(2,3,1,1,4,1,2,1,2,3,3,4,3,4,2,2,4,3)
+tgp(choices=Unscored, key=key, item=4, co=NA, label=TRUE)
 }
 \author{
   Ivailo Partchev
@@ -48,3 +50,4 @@ tgp(choices = Unscored, key = key, item = 4, co = NA, label = TRUE)
   \code{\link{plot.irf}}
 }
 \keyword{models}
+

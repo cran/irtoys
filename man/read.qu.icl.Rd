@@ -2,7 +2,7 @@
 \alias{read.qu.icl}
 \title{Read in quadrature}
 \usage{
-read.qu.icl(file)
+  read.qu.icl(file)
 }
 \arguments{
   \item{file}{File name}
@@ -28,3 +28,4 @@ read.qu.icl(file)
   \code{\link{sca}}
 }
 \keyword{models}
+

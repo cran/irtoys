@@ -2,7 +2,7 @@
 \alias{qrs}
 \title{Quantiles of the ranked sum scores}
 \usage{
-qrs(resp)
+  qrs(resp)
 }
 \arguments{
   \item{resp}{A matrix of responses: persons as rows, items
@@ -31,3 +31,4 @@ sc <- qrs(Scored)
   \code{\link{npp}}, \code{\link{itf}}
 }
 \keyword{models}
+
