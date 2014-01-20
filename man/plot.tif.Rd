@@ -26,8 +26,7 @@
   unless something special is required.
 }
 \examples{
-p.2pl  <- est(Scored, model="2PL", engine="ltm")
-plot(tif(p.2pl$est))
+plot(tif(Scored2pl$est))
 }
 \author{
   Ivailo Partchev

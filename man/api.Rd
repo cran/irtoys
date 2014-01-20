@@ -26,8 +26,7 @@
   person fit in IRT models
 }
 \examples{
-p.2pl <- est(Scored, model="2PL", engine="ltm")
-api(Scored, p.2pl$est)
+api(Scored, Scored2pl$est)
 }
 \author{
   Ivailo Partchev

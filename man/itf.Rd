@@ -118,8 +118,7 @@
   marginal tables in package \code{ltm}.
 }
 \examples{
-p.2pl <- est(Scored, model="2PL", engine="ltm")
-fit   <- itf(resp=Scored, ip=p.2pl$est, item=7)
+fit   <- itf(resp=Scored, ip=Scored2pl$est, item=7)
 }
 \author{
   Ivailo Partchev

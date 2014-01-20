@@ -31,8 +31,7 @@
   posterior distribution of ability
 }
 \examples{
-p.2pl <- est(Scored, model="2PL", engine="ltm")
-plval <- dpv(resp=Scored, ip=p.2pl$est)
+plval <- dpv(resp=Scored, ip=Scored2pl$est)
 }
 \author{
   Ivailo Partchev

@@ -26,8 +26,7 @@
   something special is required.
 }
 \examples{
-p.2pl  <- est(Scored, model="2PL", engine="ltm")
-plot(trf(p.2pl$est))
+plot(trf(Scored2pl$est))
 }
 \author{
   Ivailo Partchev

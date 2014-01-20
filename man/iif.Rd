@@ -35,8 +35,7 @@
   of the IIF.
 }
 \examples{
-p.2pl  <- est(Scored, model="2PL", engine="ltm")
-plot(iif(p.2pl$est[1:3,]))
+plot(iif(Scored2pl$est[1:3,]))
 }
 \author{
   Ivailo Partchev

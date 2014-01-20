@@ -35,8 +35,7 @@
   for each person by direct optimization
 }
 \examples{
-p.2pl  <- est(Scored, model="2PL", engine="ltm")
-th.mle <- mlebme(resp=Scored, ip=p.2pl$est)
+th.mle <- mlebme(resp=Scored, ip=Scored2pl$est)
 }
 \author{
   Ivailo Partchev

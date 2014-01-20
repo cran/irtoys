@@ -122,6 +122,7 @@ adv.scale = function(sp,np,sq=NULL,nq=NULL,haeb=FALSE,bec=FALSE) {
 #' @export
 #' @examples
 #' 
+#' \dontrun{
 #' # a small simulation to demonstrate transformation to a common scale
 #' # fake 50 2PL items
 #' pa <- cbind(runif(50,.8,2), runif(50,-2.4,2.4), rep(0,50))
@@ -140,6 +141,7 @@ adv.scale = function(sp,np,sq=NULL,nq=NULL,haeb=FALSE,bec=FALSE) {
 #' pa.sc = sca(old.ip=p.1$est, new.ip=p.2$est, old.items=21:30, new.items=1:10)
 #' # add difficulties of scaled items to plot
 #' text(pa[21:50,2], pa.sc$scaled.ip[,2], 21:50, co=3)
+#' }
 #' 
 sca = function(old.ip, new.ip, old.items, new.items,
   old.qu=NULL, new.qu=NULL, method="MS", bec=FALSE) {

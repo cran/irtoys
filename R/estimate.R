@@ -108,7 +108,6 @@ est.blm = function(resp, model, nqp, est.distr,
 
 # prepare and run an LTM setup, return parameter estimates
 est.ltm = function(resp, model, nqp, rasch) {
-  library(ltm)
   nit = ncol(resp)
   switch(model,
     "1PL" = {

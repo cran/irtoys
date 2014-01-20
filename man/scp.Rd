@@ -28,8 +28,7 @@
   shown in red.
 }
 \examples{
-p.2pl <- est(Scored, model="2PL", engine="ltm")
-scp(Scored, p.2pl$est)
+scp(Scored, Scored2pl$est)
 }
 \author{
   Ivailo Partchev

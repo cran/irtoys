@@ -118,3 +118,36 @@ tia = function(choices, key, ...) {
   list(testlevel=list(alpha=alpha),itemlevel=tsk,optionlevel=itr)
 }
 
+#' Approximate tetrachoric correlation matrix
+#' 
+#' Matrix of tetrachoric correlations using the approximation by 
+#' Bonett and Price (2005).
+#' 
+#' @param d a matrix (or data frame, which will be converted to a matrix) containing
+#' only zeroes an ones. NAs are not allowed.
+#' @return A matrix of approximate tetrachoric correlations. 
+#' @author Ivailo Partchev
+#' @references Douglas G. Bonett and Robert M. Price (2005). Inferential Methods for the 
+#' Tetrachoric Correlation Coefficient. Journal of Educational and Behavioral Statistics,
+#' Vol. 30, No. 2, pp. 213--225
+#' @keywords models
+#' @export
+#' @examples
+#' 
+#' tetras <- tet(Scored)
+#' 
+tet <- function (d) {
+  d = as.matrix(d)
+  stopifnot(all(d %in% 0:1))
+  n = nrow(d)
+  x = crossprod(d,d)
+  y = diag(x)
+  m = -sweep(x, 1, y, "-")
+  o = (x + .5) * (n - x - m - t(m) + .5) / (m + .5) / t(m + .5)
+  y = y / n
+  w = pmin(y, 1 - y)
+  p = (1 - abs(outer(y, y , "-")) / 5 - (0.5 - outer(w, w, pmin))^2) / 2 
+  cos(pi / (1 + o^p))
+}
+
+

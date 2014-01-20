@@ -30,11 +30,10 @@
   unless something special is required.
 }
 \examples{
-p.2pl  <- est(Scored, model="2PL", engine="ltm")
 # plot IIF for all items in red, label with item number
-plot(iif(p.2pl$est), co="red", label=TRUE)
+plot(iif(Scored2pl$est), co="red", label=TRUE)
 # plot IIF for items 2, 3, and 7 in different colours
-plot(iif(p.2pl$est[c(2,3,7),]), co=NA)
+plot(iif(Scored2pl$est[c(2,3,7),]), co=NA)
 }
 \author{
   Ivailo Partchev

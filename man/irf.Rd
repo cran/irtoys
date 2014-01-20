@@ -43,8 +43,7 @@
   of the IRF.
 }
 \examples{
-p.2pl  <- est(Scored, model="2PL", engine="ltm")
-plot(irf(p.2pl$est[1,]))
+plot(irf(Scored2pl$est[1,]))
 }
 \author{
   Ivailo Partchev

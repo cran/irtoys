@@ -31,15 +31,18 @@
 #' @export
 #' @examples
 #' 
-#' p.2pl  <- est(Scored, model="2PL", engine="ltm")
-#' plot(irf(p.2pl$est[1,]))
+#' plot(irf(Scored2pl$est[1,]))
 #' 
 irf = function(ip,x=NULL) {
-  if (is.null(x)) x = seq(-4,4,length=101) 
-  if (is.null(dim(ip))) dim(ip) = c(1,3)
-  ni = dim(ip)[1]
-  f = sapply(1:ni, function(i) ip[i,3] + (1.0 - ip[i,3]) / (1.0 + exp(ip[i,1]*(ip[i,2] - x))))
-  r = list(x=x, f=f) 
+ if (is.null(x)) 
+    x = seq(-4, 4, length = 101)
+  if (is.null(dim(ip))) 
+    dim(ip) = c(1, 3)
+  f = sweep(outer(x, ip[,2], "-"), 2, ip[,1], "*")
+  f = 1 / (1 + exp(-f))
+  if (any(ip[,3]!=0)) 
+    f = sweep(sweep(f, 2, 1-ip[,3], "*"), 2, ip[,3], "+")
+  r = list(x = x, f = f)
   class(r) = "irf"
   return(r)
 }
@@ -68,11 +71,10 @@ irf = function(ip,x=NULL) {
 #' @S3method plot irf
 #' @examples
 #' 
-#' p.2pl  <- est(Scored, model="2PL", engine="ltm")
 #' # plot IRF for all items in red, label with item number
-#' plot(irf(p.2pl$est), co="red", label=TRUE)
+#' plot(irf(Scored2pl$est), co="red", label=TRUE)
 #' # plot IRF for items 2, 3, and 7 in different colours
-#' plot(irf(p.2pl$est[c(2,3,7),]), co=NA)
+#' plot(irf(Scored2pl$est[c(2,3,7),]), co=NA)
 #' 
 plot.irf = function(x,  
     add=FALSE, main="Item response function", co=1, label=FALSE, ...) {
@@ -113,8 +115,7 @@ plot.irf = function(x,
 #' @export
 #' @examples
 #' 
-#' p.2pl  <- est(Scored, model="2PL", engine="ltm")
-#' plot(trf(p.2pl$est))
+#' plot(trf(Scored2pl$est))
 #' 
 trf = function(ip,x=NULL) {
   i = irf(ip,x)
@@ -147,8 +148,7 @@ trf = function(ip,x=NULL) {
 #' @S3method plot trf
 #' @examples
 #' 
-#' p.2pl  <- est(Scored, model="2PL", engine="ltm")
-#' plot(trf(p.2pl$est))
+#' plot(trf(Scored2pl$est))
 #' 
 plot.trf = function(x, 
     add=FALSE, main="Test response function", co=1, ...) {
@@ -186,25 +186,24 @@ plot.trf = function(x,
 #' @export
 #' @examples
 #' 
-#' p.2pl  <- est(Scored, model="2PL", engine="ltm")
-#' plot(iif(p.2pl$est[1:3,]))
+#' plot(iif(Scored2pl$est[1:3,]))
 #' 
 iif = function(ip, x=NULL) {
-  if (is.null(dim(ip))) dim(ip) = c(1,3)
-  ip2 = ip
-  ip2[,3] = 0
-  i2 = irf(ip2, x)
-  p2 = i2$f  
-  q2 = 1 - p2
-  if (any(ip[,3] != 0)) {
-    p3 = irf(ip, x)$f
-    q3 = 1 - p3
-    f = p2*p2*q3/p3
-  } else f  = p2*q2
-  asq = rep(ip[,1]*ip[,1], each=length(i2$x))
-  r = list(x=i2$x,f=asq*f)
+  if (is.null(x)) 
+    x = seq(-4, 4, length = 101)
+  if (is.null(dim(ip))) 
+    dim(ip) = c(1, 3)
+  p = irf(ip, x)$f  
+  if (any(ip[, 3] != 0)) {
+    ip[,3] = 0
+    q = irf(ip, x)$f
+    f = q^2*(1-p)/p
+  } else 
+    f = p*(1-p)
+  f = sweep(f, 2, ip[,1]^2, "*")  
+  r = list(x = x, f = f)
   class(r) = "iif"
-  return(r)  
+  return(r)
 }
 
 
@@ -231,11 +230,10 @@ iif = function(ip, x=NULL) {
 #' @S3method plot iif
 #' @examples
 #' 
-#' p.2pl  <- est(Scored, model="2PL", engine="ltm")
 #' # plot IIF for all items in red, label with item number
-#' plot(iif(p.2pl$est), co="red", label=TRUE)
+#' plot(iif(Scored2pl$est), co="red", label=TRUE)
 #' # plot IIF for items 2, 3, and 7 in different colours
-#' plot(iif(p.2pl$est[c(2,3,7),]), co=NA)
+#' plot(iif(Scored2pl$est[c(2,3,7),]), co=NA)
 #' 
 plot.iif = function(x,  
   add=FALSE, main="Item information function", co=1, label=FALSE, ...) {
@@ -278,8 +276,7 @@ plot.iif = function(x,
 #' @export
 #' @examples
 #' 
-#' p.2pl  <- est(Scored, model="2PL", engine="ltm")
-#' plot(trf(p.2pl$est))
+#' plot(trf(Scored2pl$est))
 #' 
 tif = function(ip, x=NULL) {
   i = iif(ip, x)
@@ -312,8 +309,7 @@ tif = function(ip, x=NULL) {
 #' @S3method plot tif
 #' @examples
 #' 
-#' p.2pl  <- est(Scored, model="2PL", engine="ltm")
-#' plot(tif(p.2pl$est))
+#' plot(tif(Scored2pl$est))
 #' 
 plot.tif = function(x, add=FALSE, main="Test information function", co=1, ...) {
   if (is.na(co)) co = 1
@@ -343,9 +339,8 @@ plot.tif = function(x, add=FALSE, main="Test information function", co=1, ...) {
 #' @export
 #' @examples
 #' 
-#' p.2pl <- est(Scored, model="2PL", engine="ltm")
-#' th <- mlebme(resp=Scored, ip=p.2pl$est)
-#' tsc(p.2pl$est, th)
+#' th <- mlebme(resp=Scored, ip=Scored2pl$est)
+#' tsc(Scored2pl$est, th)
 #' 
 tsc = function(ip, theta){
    p = irf(ip, theta[,1])$f
@@ -385,8 +380,7 @@ tsc = function(ip, theta){
 #' @export
 #' @examples
 #' 
-#' p.2pl <- est(Scored, model="2PL", engine="ltm")
-#' scp(Scored, p.2pl$est)
+#' scp(Scored, Scored2pl$est)
 #' 
 scp = function(resp, ip, theta=NULL) {
   if (is.null(theta)) theta=mlebme(resp,ip)

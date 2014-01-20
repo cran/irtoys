@@ -30,11 +30,10 @@
   something special is required.
 }
 \examples{
-p.2pl  <- est(Scored, model="2PL", engine="ltm")
 # plot IRF for all items in red, label with item number
-plot(irf(p.2pl$est), co="red", label=TRUE)
+plot(irf(Scored2pl$est), co="red", label=TRUE)
 # plot IRF for items 2, 3, and 7 in different colours
-plot(irf(p.2pl$est[c(2,3,7),]), co=NA)
+plot(irf(Scored2pl$est[c(2,3,7),]), co=NA)
 }
 \author{
   Ivailo Partchev

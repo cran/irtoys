@@ -24,9 +24,8 @@
   known).
 }
 \examples{
-p.2pl <- est(Scored, model="2PL", engine="ltm")
-th <- mlebme(resp=Scored, ip=p.2pl$est)
-tsc(p.2pl$est, th)
+th <- mlebme(resp=Scored, ip=Scored2pl$est)
+tsc(Scored2pl$est, th)
 }
 \author{
   Ivailo Partchev

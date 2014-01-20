@@ -92,8 +92,7 @@ normal.qu = function(n=15,lower=-4,upper=4,mu=0,sigma=1,scaling="points"){
 #' @export
 #' @examples
 #' 
-#' p.2pl  <- est(Scored, model="2PL", engine="ltm")
-#' th.mle <- mlebme(resp=Scored, ip=p.2pl$est)
+#' th.mle <- mlebme(resp=Scored, ip=Scored2pl$est)
 #' 
 mlebme = function(resp, ip, mu=0, sigma=1, method="ML") {
  if (is.null(dim(resp))) dim(resp) = c(1,length(resp))
@@ -119,17 +118,12 @@ bce.one = function(resp, ip) {
 
 # variance of the Warm estimator
 bcv = function(x,r,p) {
-	three = any(p[,3] > 0)
-	pr = 1 / (1 + exp(p[,1]*(p[,2] - x)))
-	if (three) {
-		p3 = p[,3] + (1 - p[,3])*p
-		ii = p[,1]^2 / p3 * (1 - p3) * pr^2
-	} else {
-		ii = p[,1]^2 * pr * (1 - pr)
-	}
-	isum = sum(ii)
-	jsum = sum(ii * p[,1] * (1 - 2*pr))
-	return(1.0/isum + jsum^2 / (4 * isum^4))
+  i = iif(p, x)$f
+  p[,3] = 0
+  q = irf(p, x)$f
+  isum = sum(i)
+  jsum = sum(i * p[, 1] * (1 - 2 * q))
+  return(1/isum + jsum^2/(4 * isum^4))
 }
 	
 # score function (Warm's estimates for the 3PL 
@@ -179,8 +173,7 @@ scf = function(x,re,p) {
 #' @export
 #' @examples
 #' 
-#' p.2pl <- est(Scored, model="2PL", engine="ltm")
-#' th.bce <- wle(resp=Scored, ip=p.2pl$est)
+#' th.bce <- wle(resp=Scored, ip=Scored2pl$est)
 #' 
 wle = function(resp, ip) {
  if (is.null(dim(resp))) dim(resp) = c(1,length(resp))
@@ -232,8 +225,7 @@ eap.one = function(r, p, qp, qw) {
 #' @export
 #' @examples
 #' 
-#' p.2pl <- est(Scored, model="2PL", engine="ltm")
-#' th.eap <- eap(resp=Scored, ip=p.2pl$est, qu=normal.qu())
+#' th.eap <- eap(resp=Scored, ip=Scored2pl$est, qu=normal.qu())
 #' 
 eap = function(resp, ip, qu) {
   if (is.null(dim(resp))) dim(resp) = c(1,length(resp))
@@ -305,8 +297,7 @@ dpv.one = function(resp, ip, n=5, mu, s) {
 #' @export
 #' @examples
 #' 
-#' p.2pl <- est(Scored, model="2PL", engine="ltm")
-#' plval <- dpv(resp=Scored, ip=p.2pl$est)
+#' plval <- dpv(resp=Scored, ip=Scored2pl$est)
 #' 
 dpv = function(resp, ip, mu=0, sigma=1, n=5) {
  if (is.null(dim(resp))) dim(resp) = c(1,length(resp))

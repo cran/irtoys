@@ -114,8 +114,7 @@ grp = function(theta, bins=9, breaks=NULL, equal="count", type="means") {
 #' @export
 #' @examples
 #' 
-#' p.2pl <- est(Scored, model="2PL", engine="ltm")
-#' fit   <- itf(resp=Scored, ip=p.2pl$est, item=7)
+#' fit   <- itf(resp=Scored, ip=Scored2pl$est, item=7)
 #' 
 itf = function(resp, ip, item, stat = "lr", theta,
   standardize=TRUE, mu=0, sigma=1, 
@@ -181,8 +180,7 @@ itf = function(resp, ip, item, stat = "lr", theta,
 #' @export
 #' @examples
 #' 
-#' p.2pl <- est(Scored, model="2PL", engine="ltm")
-#' api(Scored, p.2pl$est)
+#' api(Scored, Scored2pl$est)
 #' 
 api = function(resp, ip, theta){
   if(missing(theta)) theta = mlebme(resp, ip)

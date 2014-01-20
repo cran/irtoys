@@ -26,8 +26,7 @@
   responses.
 }
 \examples{
-p.2pl <- est(Scored, model="2PL", engine="ltm")
-th.bce <- wle(resp=Scored, ip=p.2pl$est)
+th.bce <- wle(resp=Scored, ip=Scored2pl$est)
 }
 \author{
   Ivailo Partchev

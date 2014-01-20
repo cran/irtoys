@@ -50,6 +50,7 @@
   and Haebara.
 }
 \examples{
+\dontrun{
 # a small simulation to demonstrate transformation to a common scale
 # fake 50 2PL items
 pa <- cbind(runif(50,.8,2), runif(50,-2.4,2.4), rep(0,50))
@@ -68,6 +69,7 @@ text(pa[21:50,2], p.2$est[,2], 21:50, co=2)
 pa.sc = sca(old.ip=p.1$est, new.ip=p.2$est, old.items=21:30, new.items=1:10)
 # add difficulties of scaled items to plot
 text(pa[21:50,2], pa.sc$scaled.ip[,2], 21:50, co=3)
+}
 }
 \author{
   Ivailo Partchev and Tamaki Hattori

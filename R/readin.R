@@ -21,8 +21,6 @@ read.ip.bilog = function(file) {
   p = read.fwf(file=file, widths=c(8,8,rep(10,13),4,1,1), skip=4, header=FALSE)
   return(list(est=cbind(p[,5],p[,7],p[,11]),se=cbind(p[,6],p[,8],p[,12])))
 }
-# from an ICL file, read parameter estimates
-
 
 #' Read in parameter estimates
 #' 
@@ -107,3 +105,5 @@ read.qu.icl = function(file) {
 read.resp = function(file, na=".") {
   return(as.matrix(read.table(file=file, header=FALSE, na.strings=na)))
 }
+
+

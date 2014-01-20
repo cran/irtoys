@@ -1,0 +1,10 @@
+			      CHANGES IN irtoys VERSION 0.1.7
+NEW FEATURES
+
+  o new function, tet(), to calculate, quickly,  an approximate matrix of
+    tetrachoric correlations. 
+
+BUG FIXES
+
+  o fixed a bug in function wle() which affected the variance of Warm's 
+    weighted estimate of ability in the case of the 3PL model only.
