@@ -1,3 +1,39 @@
+#' Estimate ability
+#' 
+#' A wrapper around all functions for ability estimation
+#' 
+#' 
+#' @param resp A matrix of responses: persons as rows, items as columns,
+#' entries are either 0 or 1, no missing data
+#' @param method One of: "MLE", "BME", "WLE", "EAP", "PV", "QRS", "SUM" 
+#' @param ip Item parameters: the object returned by \eqn{est}.
+#' @param mu Mean of the apriori distribution when applicable
+#' @param sigma Standard deviation of the apriori distribution when applicable
+#' \code{method="ML"}. Default is 1.
+#' @param n The number of plausible values to draw for each person (default is
+#' 5).
+#' @return Depends on the method.
+#' @author Ivailo Partchev
+#' @seealso \code{\link{mlebme}}, \code{\link{eap}}, \code{\link{wle}}, \code{\link{dpv}}, \code{\link{qrs}}
+#' @keywords models
+#' @export
+#' @examples
+#' 
+#' theta <- ability(resp=Scored, method="WLE", ip=Scored2pl)
+#' 
+ability = function(resp, ip, method="WLE", mu=0, sigma=1, n=5) {
+  switch(method,
+         "MLE" = {mlebme(resp=resp, ip=ip$est, method="ML")},
+         "BME" = {mlebme(resp=resp, ip=ip$est, mu=mu, sigma=sigma, method="BM")},
+         "WLE" = {wle(resp=resp, ip=ip$est)},
+         "EAP" = {eap(resp=resp, ip=ip$est, normal.qu())},
+         "PV"  = {dpv(resp=resp, ip=ip$est, mu=mu, sigma=sigma, n=n)},
+         "QRS" = {qrs(resp=resp)},
+         "SUM" = {resp[is.na(resp)]=0; as.matrix(rowSums(resp))})
+}
+
+
+
 # 3PL log posterior for one person / response vector
 # r=responses, p=parm list, x=ability, mu, sigma
 llf = function(x,r,p,mu,sigma,method) {
@@ -73,9 +109,7 @@ normal.qu = function(n=15,lower=-4,upper=4,mu=0,sigma=1,scaling="points"){
 #' 
 #' @param resp A matrix of responses: persons as rows, items as columns,
 #' entries are either 0 or 1, no missing data
-#' @param ip Item parameters: a matrix with one row per item, and three
-#' columns: [,1] item discrimination \eqn{a}, [,2] item difficulty \eqn{b}, and
-#' [,3] asymptote \eqn{c}.
+#' @param ip Item parameters: the object returned by \eqn{est}.
 #' @param mu Mean of the apriori distribution. Ignored when \code{method="ML"}.
 #' Default is 0.
 #' @param sigma Standard deviation of the apriori distribution. Ignored when
@@ -92,9 +126,10 @@ normal.qu = function(n=15,lower=-4,upper=4,mu=0,sigma=1,scaling="points"){
 #' @export
 #' @examples
 #' 
-#' th.mle <- mlebme(resp=Scored, ip=Scored2pl$est)
+#' th.mle <- mlebme(resp=Scored, ip=Scored2pl)
 #' 
 mlebme = function(resp, ip, mu=0, sigma=1, method="ML") {
+ if (is.list(ip)) ip = ip$est
  if (is.null(dim(resp))) dim(resp) = c(1,length(resp))
  if (is.null(dim(ip))) stop("item parameters not a matrix")
  if (nrow(ip) != ncol(resp)) stop("responses - item parameters mismatch")
@@ -118,9 +153,9 @@ bce.one = function(resp, ip) {
 
 # variance of the Warm estimator
 bcv = function(x,r,p) {
-  i = iif(p, x)$f
+  i = iif(ip=p, x=x)$f
   p[,3] = 0
-  q = irf(p, x)$f
+  q = irf(ip=p, x=x)$f
   isum = sum(i)
   jsum = sum(i * p[, 1] * (1 - 2 * q))
   return(1/isum + jsum^2/(4 * isum^4))
@@ -147,8 +182,6 @@ scf = function(x,re,p) {
 	return(sm + jsum / (isum*2))
 }
 
-# Bias-corrected (aka Warm's) ability estimates
-
 
 #' Bias-corrected (Warm's) estimates of ability
 #' 
@@ -159,9 +192,7 @@ scf = function(x,re,p) {
 #' 
 #' @param resp A matrix of responses: persons as rows, items as columns,
 #' entries are either 0 or 1, no missing data
-#' @param ip Item parameters: a matrix with one row per item, and three
-#' columns: [,1] item discrimination \eqn{a}, [,2] item difficulty \eqn{b}, and
-#' [,3] asymptote \eqn{c}.
+#' @param ip Item parameters: the object returned by \eqn{est}.
 #' @return A matrix with the ability estimates in column 1, and their standard
 #' errors of measurement (SEM) in column 2, and the number of non-missing
 #' reponses in column 3
@@ -173,9 +204,10 @@ scf = function(x,re,p) {
 #' @export
 #' @examples
 #' 
-#' th.bce <- wle(resp=Scored, ip=Scored2pl$est)
+#' th.bce <- wle(resp=Scored, ip=Scored2pl)
 #' 
 wle = function(resp, ip) {
+ if (is.list(ip)) ip = ip$est
  if (is.null(dim(resp))) dim(resp) = c(1,length(resp))
  if (is.null(dim(ip))) stop("item parameters not a matrix")
  if (nrow(ip) != ncol(resp)) stop("responses - item parameters mismatch")
@@ -210,9 +242,7 @@ eap.one = function(r, p, qp, qw) {
 #' 
 #' @param resp A matrix of responses: persons as rows, items as columns,
 #' entries are either 0 or 1, no missing data
-#' @param ip Item parameters: a matrix with one row per item, and three
-#' columns: [,1] item discrimination \eqn{a}, [,2] item difficulty \eqn{b}, and
-#' [,3] asymptote \eqn{c}.
+#' @param ip Item parameters: the object returned by \eqn{est}.
 #' @param qu A quadrature object produced with \code{\link{normal.qu}} or read
 #' in with \code{\link{read.qu.icl}}
 #' @return A matrix with the ability estimates in column 1, and their standard
@@ -225,9 +255,10 @@ eap.one = function(r, p, qp, qw) {
 #' @export
 #' @examples
 #' 
-#' th.eap <- eap(resp=Scored, ip=Scored2pl$est, qu=normal.qu())
+#' th.eap <- eap(resp=Scored, ip=Scored2pl, qu=normal.qu())
 #' 
 eap = function(resp, ip, qu) {
+  if (is.list(ip)) ip = ip$est
   if (is.null(dim(resp))) dim(resp) = c(1,length(resp))
   if (is.null(dim(ip))) stop("item parameters not a matrix")
   if (nrow(ip) != ncol(resp)) stop("responses - item parameters mismatch")
@@ -240,7 +271,7 @@ eap = function(resp, ip, qu) {
 }
 
 like = function(x, r, p, mu=0, s=1, log=FALSE, post=TRUE) {
-  pr = irf(p,x)$f
+  pr = irf(ip=p, x=x)$f
 	pr = pmax(pr, .00001); pr = pmin(pr, .99999)
   ll = log(pr) %*% r + log(1 - pr) %*% (1-r)
   if (post) 
@@ -281,10 +312,8 @@ dpv.one = function(resp, ip, n=5, mu, s) {
 #' 
 #' @param resp A matrix of responses: persons as rows, items as columns,
 #' entries are either 0 or 1, no missing data
-#' @param ip Item parameters: a matrix with one row per item, and three
-#' columns: [,1] item discrimination \eqn{a}, [,2] item difficulty \eqn{b}, and
-#' [,3] asymptote \eqn{c}.
-#' @param mu Mean of the apriori distribution. Ignored when \code{method="ML"}.
+#' @param ip Item parameters: the object returned by \eqn{est}.
+#' @param mu Mean of the apriori distribution. 
 #' Default is 0.
 #' @param sigma Standard deviation of the apriori distribution. Ignored when
 #' \code{method="ML"}. Default is 1.
@@ -297,9 +326,10 @@ dpv.one = function(resp, ip, n=5, mu, s) {
 #' @export
 #' @examples
 #' 
-#' plval <- dpv(resp=Scored, ip=Scored2pl$est)
+#' plval <- dpv(resp=Scored, ip=Scored2pl)
 #' 
 dpv = function(resp, ip, mu=0, sigma=1, n=5) {
+ if (is.list(ip))  ip = ip$est
  if (is.null(dim(resp))) dim(resp) = c(1,length(resp))
  if (is.null(dim(ip))) stop("item parameters not a matrix")
  if (nrow(ip) != ncol(resp)) stop("responses - item parameters mismatch")

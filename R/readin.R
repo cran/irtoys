@@ -8,18 +8,39 @@
 #' 
 #' 
 #' @param file File name
-#' @return A list with two elements, \code{est} and \code{se}, for the parameter 
-#' estimates and their standard errors, correspondingly. Each element is a  
-#' matrix with one row per item, and three columns: [,1] item
+#' @return A list with three elements, \code{est}, \code{se}, \code{vcm} for the parameter 
+#' estimates, their standard errors, and the variance-covariance matrix per item. 
+#' The first two are matrices with one row per item, and three columns: [,1] item
 #' discrimination \eqn{a}, [,2] item difficulty \eqn{b}, and [,3] asymptote
 #' \eqn{c}. For the 1PL and 2PL models, all asymptotes are equal to 0; for the
-#' 1PL, the discriminations are all equal but not necessarily equal to 1.
+#' 1PL, the discriminations are all equal but not necessarily equal to 1. 
 #' @author Ivailo Partchev
 #' @export
 #' @keywords data
 read.ip.bilog = function(file) {
   p = read.fwf(file=file, widths=c(8,8,rep(10,13),4,1,1), skip=4, header=FALSE)
-  return(list(est=cbind(p[,5],p[,7],p[,11]),se=cbind(p[,6],p[,8],p[,12])))
+  nit = nrow(p)
+  # the covariance matrices are more trouble
+  vn = gsub("BLMP","COV",file)
+  fu = readLines(vn)[-(1:2)]
+  fu = unlist(strsplit(fu, split = "\\s"))
+  fu = as.numeric(fu[grep("-?[0-9]+.[0-9]{6}", fu)])
+  m = matrix(fu, nrow=nit, byrow=TRUE)
+  # this extracted them all
+  # check which model
+  no_asympt = sd(m[,3])==0 
+  no_slopes = sd(m[,1])==0 
+  vm = lapply(1:nit,function(x){
+    z = matrix(0,3,3)
+    z[upper.tri(z,diag=TRUE)]=m[x,4:9]
+    di=diag(z)
+    z = z+t(z)
+    diag(z)=di
+    if (no_asympt) z=z[-3,-3]
+    if (no_slopes) z=z[2,2]
+    z
+  })
+  return(list(est=cbind(p[,5],p[,7],p[,11]),se=cbind(p[,6],p[,8],p[,12]),vcm=vm))
 }
 
 #' Read in parameter estimates
@@ -31,9 +52,10 @@ read.ip.bilog = function(file) {
 #' 
 #' 
 #' @param file File name
-#' @return A list with two elements, \code{est} and \code{se}, for the parameter 
-#' estimates and their standard errors, correspondingly. Because ICL does not
-#' compute standard errors, \code{se} will be NULL. \code{est} is a matrix with 
+#' @return A list with three elements, \code{est}, \code{se}, \code{vcm} for the parameter 
+#' estimates, their standard errors, and the variance-covariance matrix per item. 
+#' Because ICL does not
+#' compute standard errors, \code{se} and \code{vcm} will be NULL. \code{est} is a matrix with 
 #' one row per item, and three columns: [,1] item
 #' discrimination \eqn{a}, [,2] item difficulty \eqn{b}, and [,3] asymptote
 #' \eqn{c}. For the 1PL and 2PL models, all asymptotes are equal to 0; for the
@@ -42,7 +64,7 @@ read.ip.bilog = function(file) {
 #' @export
 #' @keywords models
 read.ip.icl = function(file) {
-  return(list(est=matrix(scan(file),ncol=4,byrow=TRUE)[,-1],se=NULL))
+  return(list(est=matrix(scan(file),ncol=4,byrow=TRUE)[,-1],se=NULL,vcm=NULL))
 }
 
 
@@ -80,7 +102,7 @@ read.qu.icl = function(file) {
 #' with models for dichotomous data, and typically expects data consisting of
 #' zeroes and ones, without any missing values (non-responses are considered as
 #' wrong responses). In fact, there are only two commands in \code{irtoys} that
-#' accept other kinds of data: \code{sco} and \code{tgp}.
+#' accept other kinds of data: \code{sco} and \code{tgf}.
 #' 
 #' \code{read.resp} does accept missing data and values other than 0 and 1. Use
 #' \code{sco} and a key to score multiple choice responses to 0/1. If you have
@@ -93,7 +115,7 @@ read.qu.icl = function(file) {
 #' wrong responses given by persons (rows) to items (columns).
 #' @author Ivailo Partchev
 #' @export
-#' @seealso \code{\link{sco}}, \code{\link{tgp}},
+#' @seealso \code{\link{sco}}, \code{\link{tgf}},
 #' @keywords IO
 #' @export
 #' @examples

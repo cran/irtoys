@@ -1,3 +1,88 @@
+#' Item fit plot 
+#' 
+#' Produces a plot that compares the estimated trace line (item response function)
+#' for an item with the data. The data is represented with a non-parametric
+#' trace line computed as in \code{tgf} (not \code{npp}). Approximate confidence
+#' intervals for the parametric line are also shown.
+#' 
+#' Comparing the outputs of \code{npp} and \code{irf} has at least two drawbacks:
+#' (i) package \code{sm} is used as a black box, and (ii) the confidence intervals
+#' are drawn around the data (even though represented by the nonparametric regression)
+#' rather than the parametric curve. In this function, the parametric curve is shown in
+#' red, with a 68% confidence interval in pink and a 95% confidence interval in paler pink.
+#' The non-parametric curve representing the data is shown in black. It is computed 
+#' by applying Bayes theorem to the density of ability.
+#' The standard error of the parametric curve is computed by
+#' applying the delta theorem on the standard error of the item parameters, as computed 
+#' by the underlying software (currently only available with ICL).  
+#' @param resp A matrix of responses: persons as rows, items as columns,
+#' entries are either 0 or 1, no missing data
+#' @param ip Item parameters: the object returned by function \code{est} -- 
+#' note that the complete object is required since the standard errors play an important part.
+#' @param x A vector of abilities, as long as there are persons, against which to plot
+#' probabilities of a correct response. Normally these would be the output of \code{qrs},
+#' and these are provided by default when x is NULL. However, the user may want to use 
+#' something else, or pass the same \code{qrs} output to several plots (various calls to
+#' \code{qrs} provide slightly different output because of the random breaking of ties.) 
+#' @param item The item for which a plot is requested (column of \code{resp}).
+#' @param main The main title of the plot.
+#' @param use.sm When TRUE, empirical data will be shown with a regression estimated
+#' by \code{sm}, otherwise the Bayes theorem will be used. Default is FALSE.
+#' @author Ivailo Partchev
+#' @seealso \code{\link{irf}}, \code{\link{npp}}, \code{\link{tgf}}
+#' @export
+#' @examples
+#' 
+#' # a plot for item 5 
+#' irfPlot(Scored, ip=b3, item=4)
+#' 
+irfPlot = function(resp, ip, x=NULL, item, main="Parametric vs non-parametric trace line", use.sm=FALSE) {
+  # the parametric trace line
+  abc = ip$est[item,,drop=FALSE]
+  vcm = ip$vcm[[item]]
+  ptl = irf(ip=abc)
+  P = ptl$f
+  plot(c(-4,4),c(0,1),type="n",xlab="Ability",ylab="Probability of a correct response",
+       main=main,sub=paste("Item",item))
+  if(!is.null(ip$vcm)) {
+    no_asymp = sd(ip$est[,3])==0
+    no_slope = sd(ip$est[,1])==0
+    pc = (1-P) / (1-abc[3])
+    if (no_asymp) {
+      if (no_slope) SE=P*(1-P)*sqrt(ip$vcm[[item]]) else {
+        grad = cbind(P*(1-P), P*(1-P)*ptl$x)
+        SE = sqrt(diag(grad %*% vcm %*% t(grad)))
+      }
+    } else {
+      grad = cbind(pc*(ptl$x-abc[2])*(P-abc[3]), -abc[1]*pc*(P-abc[3]), pc)
+      SE = sqrt(diag(grad %*% vcm %*% t(grad)))
+      SE[!is.finite(SE)]=0
+    }
+    polygon(c(ptl$x,rev(ptl$x)),c(P+2*SE,rev(P-2*SE)),col="mistyrose",border=NA) 
+    polygon(c(ptl$x,rev(ptl$x)),c(P+SE,rev(P-SE)),col="pink",border=NA) 
+  }
+  lines(ptl$x,P,type="l",col=2,lwd=2)
+  # the non-parametric
+  if(is.null(x)) x = qrs(resp) 
+  y = resp[,item]
+  if (use.sm) {
+    h = h.select(x=x, y=y)
+    br = sm.binomial(x=x, y=y, h=h, display="none")
+    lines(br$eval.points, br$estimate, lw=2)
+  } else {
+    n = 512
+    dx = density(x, bw = "nrd0", n = n)
+    x1 = dx$x
+    yprop = mean(y)
+    dxi = density(x[y == 1], bw = dx$bw, n = n, from = min(dx$x), to = max(dx$x))
+    y1 = dxi$y/dx$y * yprop
+    y1 = y1[which(x1 >= min(x) & x1 <= max(x))]
+    x1 = x1[x1 >= min(x) & x1 <= max(x)]
+    lines(x1,y1,lwd=2,col=1)
+  }
+}
+  
+
 #' Non-parametric characteristic curves
 #' 
 #' A plotting routine producing non-parametric analogues of the IRF not unlike
@@ -37,7 +122,7 @@
 #' 
 #' # For item 7, compare npp with the 2PL parametric IRF 
 #' npp(Scored, items=7, bands=TRUE)
-#' plot(irf(ip=Scored2pl$est[7,]), co=3, add=TRUE)
+#' plot(irf(ip=Scored2pl, items=7), co=3, add=TRUE)
 #' 
 npp = function(resp, x, items, from=-4, to=4, co=1, 
   main="Non-parametric response function", add=FALSE, bands=FALSE, label=FALSE) {
@@ -115,9 +200,9 @@ qrs = function(resp) {
 #' @examples
 #' 
 #' key=c(2,3,1,1,4,1,2,1,2,3,3,4,3,4,2,2,4,3)
-#' tgp(choices=Unscored, key=key, item=4, co=NA, label=TRUE)
+#' tgf(choices=Unscored, key=key, item=4, co=NA, label=TRUE)
 #' 
-tgp = function(choices, key, item, 
+tgf = function(choices, key, item, 
     main="Non-parametric response function", co=1, label=FALSE) {
   if (!(item %in% 1:ncol(choices))) stop("bad item number")
   x = qrs(sco(choices, key))

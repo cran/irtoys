@@ -145,6 +145,8 @@ adv.scale = function(sp,np,sq=NULL,nq=NULL,haeb=FALSE,bec=FALSE) {
 #' 
 sca = function(old.ip, new.ip, old.items, new.items,
   old.qu=NULL, new.qu=NULL, method="MS", bec=FALSE) {
+  if (is.list(old.ip)) old.ip=old.ip$est
+  if (is.list(new.ip)) new.ip=new.ip$est
   if (length(old.items)  != length(new.items)) stop("no of common items does not match")
   if (!all(old.items %in% 1:nrow(old.ip))) stop("bad index for some scaled item")
   if (!all(new.items %in% 1:nrow(new.ip))) stop("bad index for some new item")

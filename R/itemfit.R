@@ -74,16 +74,15 @@ grp = function(theta, bins=9, breaks=NULL, equal="count", type="means") {
 #' 
 #' @param resp A matrix of responses: persons as rows, items as columns,
 #' entries are either 0 or 1, no missing data
-#' @param ip Item parameters: a matrix with one row per item, and three
-#' columns: [,1] item discrimination \eqn{a}, [,2] item difficulty \eqn{b}, and
-#' [,3] asymptote \eqn{c}.
+#' @param ip Item parameters: the object returned by \eqn{est}, 
+#' or the equivalent of its first part.
 #' @param item A single number pointing to the item (column of \code{resp}, row
 #' of \code{ip}), for which fit is to be tested
 #' @param stat The statistic to be computed, either \code{"chi"} or
 #' \code{"lr"}. Default is \code{"lr"}. See details below.
 #' @param theta A vector containing some viable estimate of the latent variable
 #' for the same persons whose responses are given in \code{resp}. If not given
-#' (and \code{group} is also missing), EAP estimates will be computed from
+#' (and \code{group} is also missing), WLE estimates will be computed from
 #' \code{resp} and \code{ip}.
 #' @param standardize Standardize the distribution of ability estimates?
 #' @param mu Mean of the standardized distribution of ability estimates
@@ -114,15 +113,16 @@ grp = function(theta, bins=9, breaks=NULL, equal="count", type="means") {
 #' @export
 #' @examples
 #' 
-#' fit   <- itf(resp=Scored, ip=Scored2pl$est, item=7)
+#' fit   <- itf(resp=Scored, ip=Scored2pl, item=7)
 #' 
 itf = function(resp, ip, item, stat = "lr", theta,
   standardize=TRUE, mu=0, sigma=1, 
   bins = 9, breaks = NULL, equal = "count", type = "means",
   do.plot=TRUE, main="Item fit") {
+  if (is.list(ip)) ip = ip$est
   if (!(item %in% 1:nrow(ip))) stop("bad item number")
   if (nrow(ip)<20) warning("item fit statistic computed for a test of less than 20 items")
-  if (missing(theta)) theta = eap(resp, ip, normal.qu())
+  if (missing(theta)) theta = wle(resp, ip)
   if (!is.null(dim(theta))) theta = theta[, 1]
   pa = ip[item,]
   iresp = resp[,item]
@@ -149,7 +149,7 @@ itf = function(resp, ip, item, stat = "lr", theta,
     plot(c(-4,4),c(0,1),main="",xlab="Ability",ylab="Proportion right",type="n")
     title(main=main,mtext(ifit,line=0.5,cex=0.7))
     points(groups$ref, op)
-    plot(irf(pa),add=TRUE)
+    plot(irf(ip=pa),add=TRUE)
   }
   result = c(tst,dfr,pval)
   names(result) = c("Statistic","DF","P-value")
@@ -157,16 +157,14 @@ itf = function(resp, ip, item, stat = "lr", theta,
 }
 
 
-#' The Z3 appropriateness index
+#' The api appropriateness index
 #' 
-#' Computes the Z3 appropriateness index, a measure of person fit in IRT models
+#' Computes the api appropriateness index, a measure of person fit in IRT models
 #' 
 #' 
 #' @param resp A matrix of responses: persons as rows, items as columns,
 #' entries are either 0 or 1, no missing data
-#' @param ip Item parameters: a matrix with one row per item, and three
-#' columns: [,1] item discrimination \eqn{a}, [,2] item difficulty \eqn{b}, and
-#' [,3] asymptote \eqn{c}.
+#' @param ip Item parameters: the object returned by \eqn{est}, or its first part.
 #' @param theta A measure of ability, typically produced with \code{mlebme}, 
 #' \code{wle} etc. If missing, ML estimates will be computed automatically.
 #' @return A vector of length equal to the number of rows in \code{resp},
@@ -180,12 +178,13 @@ itf = function(resp, ip, item, stat = "lr", theta,
 #' @export
 #' @examples
 #' 
-#' api(Scored, Scored2pl$est)
+#' api(Scored, Scored2pl)
 #' 
 api = function(resp, ip, theta){
-  if(missing(theta)) theta = mlebme(resp, ip)
+  if (is.list(ip)) ip = ip$est
+  if(missing(theta)) theta = wle(resp, ip)
   if (!is.null(dim(theta))) theta = theta[, 1]
-  p = irf(ip, theta)$f
+  p = irf(ip=ip, x=theta)$f
 	p = pmax(p, .00001); pr = pmin(p, .99999)
   if(is.null(dim(p))) p=matrix(p,ncol=length(p))
   q = 1 - p

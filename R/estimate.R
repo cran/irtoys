@@ -1,11 +1,12 @@
 # prepare and run an ICL setup, return parameter estimates
-est.icl = function(resp, model, nqp, est.distr, 
+est.icl = function(resp, model, omitsWrong, nqp, est.distr, 
   nch, a.prior, b.prior, c.prior, bilog.defaults, run.name) {
   nit = ncol(resp)
   f = paste(run.name,".tcl", sep="")
   d = paste(run.name,".dat", sep="")
   p = paste(run.name,".iclp",sep="")
-  write.table(resp,file=d, append=FALSE, sep="", row.names=FALSE, col.names=FALSE, na=".")
+  if (omitsWrong) missg="0" else missg="."
+  write.table(resp,file=d, append=FALSE, sep="", row.names=FALSE, col.names=FALSE, na=missg)
   cat("output -log_file",paste(run.name,".iclo",sep=""),"\n",file=f)
   m = switch(model, "1PL"=1, "2PL"=2, "3PL"=3, 4)
   if (m>3) {
@@ -47,17 +48,19 @@ est.icl = function(resp, model, nqp, est.distr,
 }
 
 # prepare and run a BILOG setup, return parameter estimates
-est.blm = function(resp, model, nqp, est.distr,
+est.blm = function(resp, model, omitsWrong, nqp, est.distr,
   nch, a.prior, b.prior, c.prior, bilog.defaults, run.name, rasch) {
   nit = ncol(resp)
   if (nit>9999) stop("cannot have more than 9999 items")
   f = paste(run.name,".blm", sep="")
   d = paste(run.name,".dat", sep="")
   p = paste(toupper(run.name),".BLMP",sep="")
+  vm = paste(toupper(run.name),".COV",sep="")
   np = nrow(resp)
   if (np>999999) stop("cannot have more than 999999 observations")
   resp = cbind(sprintf("%06d",1:np),resp)
-  write.table(resp, file=d, append=FALSE, sep="", row.names=FALSE, col.names=FALSE, na=".", quote=FALSE)
+  if (omitsWrong) missg="0" else missg="."
+  write.table(resp, file=d, append=FALSE, sep="", row.names=FALSE, col.names=FALSE, na=missg, quote=FALSE)
   cat("Running Bilog from R\n\n",file=f)
   m = switch(model, "1PL"=1, "2PL"=2, "3PL"=3, 4)
   if (m>3) {
@@ -69,13 +72,13 @@ est.blm = function(resp, model, nqp, est.distr,
   cat("   NPArm = ",m,",\n",sep="",file=f,append=TRUE) 
   cat("   LOGistic\n",file=f,append=TRUE)
   cat("   SAVE;\n",file=f,append=TRUE) 
-  cat(">SAVE PARm = '",p,"';\n",sep="",file=f,append=TRUE)
+  cat(">SAVE PARm = '",p,"' COVAR = '",vm,"';\n",sep="",file=f,append=TRUE)
   cat(">LENGTH NITems = (",nit,");\n",sep="",file=f,append=TRUE)   
   cat(">INPUT NTOtal = ",nit,",\n",sep="",file=f,append=TRUE)
   if (m>2) cat("   NALT = ",nch,",\n",sep="",file=f,append=TRUE)
-  if (any(is.na(resp))) {
+  if (any(is.na(resp)) & !omitsWrong) {
     cat("   NFName = 'myNF.ile'\n",file=f,append=TRUE)
-    cat(paste(rep(".",ncol(resp)),collapse=""),"\n",file="myNF.ile")
+    cat("123456",paste(rep(".",ncol(resp)),collapse=""),"\n",file="myNF.ile")
   }
   cat("   SAMple = ",np,",\n",sep="",file=f,append=TRUE) 
   cat("   NIDchar = 6;\n",file=f,append=TRUE) 
@@ -107,26 +110,49 @@ est.blm = function(resp, model, nqp, est.distr,
 }
 
 # prepare and run an LTM setup, return parameter estimates
-est.ltm = function(resp, model, nqp, rasch) {
+est.ltm = function(resp, model, omitsWrong, nqp, rasch) {
   nit = ncol(resp)
+  if (omitsWrong) resp[is.na(resp)] = 0
   switch(model,
     "1PL" = {
       constr = if (rasch) rbind(c(nit+1, 1)) else NULL
-      m = rasch(resp, constraint=constr, control = list(GHk = nqp))},
-    "2PL" = {m = ltm(resp ~ z1, control = list(GHk = nqp))},
-    "3PL" = {m = tpm(resp, control = list(GHk = nqp), max.guessing=1)}, 
+      m = rasch(resp, constraint=constr, control = list(GHk = nqp))
+      p = coef(m)
+      p = cbind(p[,2],p[,1],0)
+      se= summary(m)$coef[,2]
+      vcm = lapply(se,function(x)x^2)
+      se = cbind(0,se,0)
+      },
+    "2PL" = {
+      m = ltm(resp ~ z1, control = list(GHk = nqp))
+      p = coef(m)
+      p = cbind(p[,2],p[,1],0)
+      se= summary(m)$coef[,2]
+      se= cbind(matrix(se,nit,2),0)[,c(2,1,3)]
+      v = vcov(m)
+      d = m$coefficients
+      j = cbind(diag(-1/d[,2]), diag(d[,1]/d[,2]^2))
+      j = rbind(j, cbind(matrix(0,nit,nit),diag(nit)))
+      v = j %*% v %*% t(j)
+      vcm = lapply(1:nit, function(x)v[c(nit+x,x),c(nit+x,x)])
+    },
+    "3PL" = {
+      m = tpm(resp, control = list(GHk = nqp), max.guessing=1)
+      p = coef(m)
+      p = p[,3:1]
+      se= summary(m)$coef[,2]
+      se= matrix(se,nit,3)[,c(3:1)]
+      v = vcov(m)
+      d = m$coefficients
+      j = diag(3*nit)
+      j[(nit+1):(2*nit),] = cbind(matrix(0,nit,nit), diag(-1/d[,3]), diag(d[,2]/d[,3]^2))
+      v = j %*% v %*% t(j)
+      vcm = lapply(1:nit, function(x)v[c(2*nit+x,nit+x,x),c(2*nit+x,nit+x,x)])
+    }, 
     stop(paste("model",model,"not supported in ltm"))
   )
-  p = coef(m)
-  p = if(model=="3PL") cbind(p[,3], p[,2], p[,1]) else
-      cbind(p[,2],p[,1],0)    
-  q = summary(m)$coefficients[,2]
-  lq = length(q)
-  switch(model, `1PL` = se <- cbind(q[lq],q[-lq],0),
-     `2PL` = se <- cbind(matrix(q, ncol=2)[,c(2,1)],0),
-     `3PL` = se <- matrix(q,ncol=3)[,c(3,2,1)])
   attr(se, "dimnames") = NULL
-  return(list(est=p, se=se)) 
+  list(est=p,se=se,vcm=vcm)
 }
 
 
@@ -183,7 +209,8 @@ est.ltm = function(resp, model, nqp, rasch) {
 #' 
 #' \code{est} only works when some IRT software is installed.  Package
 #' \code{ltm} is automatically loaded. ICL can be downloaded from
-#' \url{www.b-a-h.com}. BILOG is commercial software sold by SSI --- see
+#' \url{www.b-a-h.com}. Alternative links are provided in the help screen for 
+#' this package. BILOG is commercial software sold by SSI --- see
 #' \url{www.ssicentral.com} for further detail.  On Windows, make sure that the
 #' executable files (\code{icl.exe} for ICL, \code{blm1.exe}, \code{blm2.exe},
 #' and \code{blm3.exe}, for BILOG) are located in directories that are included
@@ -193,6 +220,8 @@ est.ltm = function(resp, model, nqp, rasch) {
 #' entries are either 0 or 1, no missing data
 #' @param model The IRT model: "1PL", "2PL", or "3PL". Default is "2PL".
 #' @param engine One of "icl", "bilog", or "ltm". Default is "icl".
+#' @param omitsWrong If TRUE, all omitted items will be recoded as wrong
+#' responses, otherwise they will be treated as missing (default) 
 #' @param nqp Number of quadrature points. Default is 20.
 #' @param est.distr T if the probabilities of the latent distribution are to be
 #' estimated, F if a normal distribution is assumed. Default is F. Ignored when
@@ -219,13 +248,15 @@ est.ltm = function(resp, model, nqp, rasch) {
 #' written by ICL or BILOG. Default is \code{"mymodel"}. Change to something
 #' else to keep the outputs of ICL of BILOG for further use. Ignored when
 #' \code{engine="ltm"}
-#' @return A list with two elements, \code{est} and \code{se}, for the parameter 
-#' estimates and their standard errors, correspondingly. Each element is a  
-#' matrix with one row per item, and three columns: [,1] item
+#' @return A list with three elements: \code{est} and \code{se} are 
+#' matrices containing the parameter estimates and their standard errors, correspondingly.
+#' Each matrix has three columns: [,1] item
 #' discrimination \eqn{a}, [,2] item difficulty \eqn{b}, and [,3] asymptote
 #' \eqn{c}. For the 1PL and 2PL models, all asymptotes are equal to 0; for the
-#' 1PL, the discriminations are all equal but not necessarily equal to 1.
-#' When ICL is used as estimation engine, \code{se} is NULL as ICL does not
+#' 1PL, the discriminations are all equal but not necessarily equal to 1. The third
+#' element, \code{vcm}, is a list of variance-covariance matrices for the item 
+#' parameters. Currently, \code{vcm} is only used in function \code{irfPlot}. 
+#' When ICL is used as estimation engine, \code{se} and \code{vcm} are NULL as ICL does not
 #' compute standard errors for the item parameter estimates.
 #' @author Ivailo Partchev
 #' @references Bradley A. Hanson (2002), ICL: IRT Command Language.
@@ -244,13 +275,13 @@ est.ltm = function(resp, model, nqp, rasch) {
 #' p.1pl <- est(Scored, model="1PL", engine="ltm")
 #' p.2pl <- est(Scored, model="2PL", engine="ltm")
 #' 
-est = function(resp, model="2PL", engine="icl", nqp=20, est.distr=FALSE,
+est = function(resp, model="2PL", engine="icl", omitsWrong=FALSE, nqp=20, est.distr=FALSE,
   nch=5, a.prior=TRUE, b.prior=FALSE, c.prior=TRUE, 
   bilog.defaults=TRUE, rasch=FALSE, run.name="mymodel") {
   res = switch(engine,
-    "icl"=  est.icl(resp, model, nqp, est.distr, nch, a.prior, b.prior, c.prior, bilog.defaults, run.name),
-    "bilog"=est.blm(resp, model, nqp, est.distr, nch, a.prior, b.prior, c.prior, bilog.defaults, run.name, rasch),
-    "ltm"=  est.ltm(resp, model, nqp, rasch),
+    "icl"=  est.icl(resp, model, omitsWrong, nqp, est.distr, nch, a.prior, b.prior, c.prior, bilog.defaults, run.name),
+    "bilog"=est.blm(resp, model, omitsWrong, nqp, est.distr, nch, a.prior, b.prior, c.prior, bilog.defaults, run.name, rasch),
+    "ltm"=  est.ltm(resp, model, omitsWrong, nqp, rasch),
     {
       warning(paste("unknown engine",engine,"using icl instead"))
       est.icl(resp,model, nqp, est.distr, nch, a.prior, b.prior, c.prior, bilog.defaults, run.name)      

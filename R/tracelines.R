@@ -16,9 +16,10 @@
 #' A common use of this function would be to obtain a plot of the IRF.
 #' 
 #' 
-#' @param ip Item parameters: a matrix with one row per item, and three
-#' columns: [,1] item discrimination \eqn{a}, [,2] item difficulty \eqn{b}, and
-#' [,3] asymptote \eqn{c}.
+#' @param ip Item parameters: the output of \code{est}, or a 3-column matrix 
+#' corresponding to its first element, \code{est}.  
+#' @param items The item(s) for which irf is computed. 
+#' If NULL (the default), irf for all items will be returned  
 #' @param x The values of the latent variable (\eqn{\theta} in the equation
 #' above), at which the IRF will be evaluated. If not given, 99 values spaced
 #' evenly between -4 and +4 will be used, handy for plotting.
@@ -31,13 +32,15 @@
 #' @export
 #' @examples
 #' 
-#' plot(irf(Scored2pl$est[1,]))
+#' plot(irf(Scored2pl, item=1))
 #' 
-irf = function(ip,x=NULL) {
+irf = function(ip,items=NULL,x=NULL) {
  if (is.null(x)) 
     x = seq(-4, 4, length = 101)
-  if (is.null(dim(ip))) 
-    dim(ip) = c(1, 3)
+ if (is.list(ip)) ip = ip$est
+ if (is.null(dim(ip))) 
+   dim(ip) = c(1, 3)
+ if (!is.null(items)) ip = ip[items, , drop=FALSE]
   f = sweep(outer(x, ip[,2], "-"), 2, ip[,1], "*")
   f = 1 / (1 + exp(-f))
   if (any(ip[,3]!=0)) 
@@ -68,21 +71,22 @@ irf = function(ip,x=NULL) {
 #' @seealso \code{\link{irf}}
 #' @keywords models
 #' @method plot irf
-#' @S3method plot irf
+#' @export
 #' @examples
 #' 
 #' # plot IRF for all items in red, label with item number
-#' plot(irf(Scored2pl$est), co="red", label=TRUE)
+#' plot(irf(Scored2pl), co="red", label=TRUE)
 #' # plot IRF for items 2, 3, and 7 in different colours
-#' plot(irf(Scored2pl$est[c(2,3,7),]), co=NA)
+#' plot(irf(Scored2pl, items=c(2,3,7)), co=NA)
 #' 
 plot.irf = function(x,  
     add=FALSE, main="Item response function", co=1, label=FALSE, ...) {
+  if (is.na(co[1])) co = 1:ncol(x$f)
   if (!add) plot(c(min(x$x), max(x$x)), c(0,1), ty="n", xlab="Ability",
   ylab="Probability of a correct response", main=main)
   invisible(lapply(1:ncol(x$f), function(i) {
-    if (is.na(co)) co = i
-    lines(x$x, x$f[,i], lw=2, co=co)
+    if (length(co) == ncol(x$f)) lines(x$x, x$f[,i], lw=2, co=co[i])
+      else lines(x$x, x$f[,i], lw=2, co=co)
   }))
   if (label) invisible(lapply(1:ncol(x$f), function(i) {
     lx = sample(1:length(x$x), 1)
@@ -101,9 +105,8 @@ plot.irf = function(x,
 #' A common use of this function would be to obtain a plot of the TRF.
 #' 
 #' 
-#' @param ip Item parameters: a matrix with one row per item, and three
-#' columns: [,1] item discrimination \eqn{a}, [,2] item difficulty \eqn{b}, and
-#' [,3] asymptote \eqn{c}.
+#' @param ip Item parameters: the output of \code{est}, or a 3-column matrix 
+#' corresponding to its first element, \code{est}.  
 #' @param x The values of the latent variable (\eqn{\theta} in the equation
 #' above), at which the IRF will be evaluated. If not given, 99 values spaced
 #' evenly between -4 and +4 will be used, handy for plotting.
@@ -115,10 +118,10 @@ plot.irf = function(x,
 #' @export
 #' @examples
 #' 
-#' plot(trf(Scored2pl$est))
+#' plot(trf(Scored2pl))
 #' 
-trf = function(ip,x=NULL) {
-  i = irf(ip,x)
+trf = function(ip, x=NULL) {
+  i = irf(ip, items=NULL, x)
   if (is.null(dim(i$f))) dim(i$f) = c(length(i$x),length(i$f))
   f = apply(i$f,1,sum)
   r = list(x=i$x, f=f, ni=ncol(i$f))
@@ -145,10 +148,10 @@ trf = function(ip,x=NULL) {
 #' @seealso \code{\link{trf}}
 #' @keywords models
 #' @method plot trf
-#' @S3method plot trf
+#' @export
 #' @examples
 #' 
-#' plot(trf(Scored2pl$est))
+#' plot(trf(Scored2pl))
 #' 
 plot.trf = function(x, 
     add=FALSE, main="Test response function", co=1, ...) {
@@ -171,9 +174,10 @@ plot.trf = function(x,
 #' A common use of this function would be to obtain a plot of the IIF.
 #' 
 #' 
-#' @param ip Item parameters: a matrix with one row per item, and three
-#' columns: [,1] item discrimination \eqn{a}, [,2] item difficulty \eqn{b}, and
-#' [,3] asymptote \eqn{c}.
+#' @param ip Item parameters: the output of \code{est}, or a 3-column matrix 
+#' corresponding to its first element, \code{est}.  
+#' @param items The item(s) for which the information function is computed. 
+#' If NULL (the default), irf for all items will be returned  
 #' @param x The values of the latent variable (\eqn{\theta} in the equation
 #' above), at which the IIF will be evaluated. If not given, 99 values spaced
 #' evenly between -4 and +4 will be used, handy for plotting.
@@ -186,17 +190,19 @@ plot.trf = function(x,
 #' @export
 #' @examples
 #' 
-#' plot(iif(Scored2pl$est[1:3,]))
+#' plot(iif(Scored2pl, items=1:3))
 #' 
-iif = function(ip, x=NULL) {
+iif = function(ip, items=NULL, x=NULL) {
   if (is.null(x)) 
     x = seq(-4, 4, length = 101)
+  if (is.list(ip)) ip = ip$est
   if (is.null(dim(ip))) 
     dim(ip) = c(1, 3)
-  p = irf(ip, x)$f  
+  if (!is.null(items)) ip = ip[items, ,drop=FALSE]
+  p = irf(ip, items=NULL, x)$f  
   if (any(ip[, 3] != 0)) {
     ip[,3] = 0
-    q = irf(ip, x)$f
+    q = irf(ip, items=NULL, x)$f
     f = q^2*(1-p)/p
   } else 
     f = p*(1-p)
@@ -227,22 +233,23 @@ iif = function(ip, x=NULL) {
 #' @seealso \code{\link{iif}}
 #' @keywords models
 #' @method plot iif
-#' @S3method plot iif
+#' @export
 #' @examples
 #' 
 #' # plot IIF for all items in red, label with item number
-#' plot(iif(Scored2pl$est), co="red", label=TRUE)
+#' plot(iif(Scored2pl), co="red", label=TRUE)
 #' # plot IIF for items 2, 3, and 7 in different colours
-#' plot(iif(Scored2pl$est[c(2,3,7),]), co=NA)
+#' plot(iif(Scored2pl, items=c(2,3,7)), co=NA)
 #' 
 plot.iif = function(x,  
   add=FALSE, main="Item information function", co=1, label=FALSE, ...) {
+  if (is.na(co[1])) co = 1:ncol(x$f)
   if (!add) plot(c(min(x$x), max(x$x)), c(0,max(x$f)), ty="n", xlab="Ability",
   ylab="Item information",main=main)
   invisible(lapply(1:ncol(x$f), function(i) {
-    if (is.na(co)) co = i
-    lines(x$x, x$f[,i], lw=2, co=co)
-    }))
+    if (length(co) == ncol(x$f)) lines(x$x, x$f[,i], lw=2, co=co[i])
+    else lines(x$x, x$f[,i], lw=2, co=co)
+  }))
     if (label) invisible(lapply(1:ncol(x$f), function(i) {
       lx = sample(1:length(x$x),1)
       points(x$x[lx], x$f[lx,i], co="white", cex=1.6, pch=19)
@@ -262,9 +269,7 @@ plot.iif = function(x,
 #' A common use of this function would be to obtain a plot of the TIF.
 #' 
 #' 
-#' @param ip Item parameters: a matrix with one row per item, and three
-#' columns: [,1] item discrimination \eqn{a}, [,2] item difficulty \eqn{b}, and
-#' [,3] asymptote \eqn{c}.
+#' @param ip Item parameters: the output of \eqn{est}.
 #' @param x The values of the latent variable (\eqn{\theta} in the equation
 #' above), at which the TIF will be evaluated. If not given, 99 values spaced
 #' evenly between -4 and +4 will be used, handy for plotting.
@@ -276,10 +281,10 @@ plot.iif = function(x,
 #' @export
 #' @examples
 #' 
-#' plot(trf(Scored2pl$est))
+#' plot(trf(Scored2pl))
 #' 
 tif = function(ip, x=NULL) {
-  i = iif(ip, x)
+  i = iif(ip=ip, items=NULL, x=x)
   if (is.null(dim(i$f))) dim(i$f) = c(length(i$x),length(i$f))
   f = apply(i$f, 1, sum)
   r = list(x=i$x, f=f, ni=ncol(i$f))
@@ -306,10 +311,10 @@ tif = function(ip, x=NULL) {
 #' @seealso \code{\link{tif}}
 #' @keywords models
 #' @method plot tif
-#' @S3method plot tif
+#' @export
 #' @examples
 #' 
-#' plot(tif(Scored2pl$est))
+#' plot(tif(Scored2pl))
 #' 
 plot.tif = function(x, add=FALSE, main="Test information function", co=1, ...) {
   if (is.na(co)) co = 1
@@ -326,9 +331,8 @@ plot.tif = function(x, add=FALSE, main="Test information function", co=1, ...) {
 #' treating item parameters as known).
 #' 
 #' 
-#' @param ip Item parameters: a matrix with one row per item, and three
-#' columns: [,1] item discrimination \eqn{a}, [,2] item difficulty \eqn{b}, and
-#' [,3] asymptote \eqn{c}.
+#' @param ip Item parameters: the output of \code{est}, or a 3-column matrix 
+#' corresponding to its first element, \code{est}.  
 #' @param theta An object containing ability estimates, as output by function
 #' \code{mlebme} or \code{eap}
 #' @return A matrix with the true scores in column 1, and their standard errors
@@ -339,11 +343,12 @@ plot.tif = function(x, add=FALSE, main="Test information function", co=1, ...) {
 #' @export
 #' @examples
 #' 
-#' th <- mlebme(resp=Scored, ip=Scored2pl$est)
-#' tsc(Scored2pl$est, th)
+#' th <- mlebme(resp=Scored, ip=Scored2pl)
+#' tsc(Scored2pl, th)
 #' 
 tsc = function(ip, theta){
-   p = irf(ip, theta[,1])$f
+   p = irf(ip=ip, x=theta[,1])$f
+   if (is.list(ip)) ip=ip$est
    if (is.null(dim(ip))) dim(ip) = c(1,3)
    if (is.null(dim(p)))  p = matrix(p, ncol=1)
    sc = apply(p, 1, sum)
@@ -366,9 +371,8 @@ tsc = function(ip, theta){
 #' 
 #' @param resp A matrix of binary responses to a test, with persons as rows and
 #' items as columns.
-#' @param ip Item parameters: a matrix with one row per item, and three
-#' columns: [,1] item discrimination \eqn{a}, [,2] item difficulty \eqn{b}, and
-#' [,3] asymptote \eqn{c}.
+#' @param ip Item parameters: the output of \code{est}, or a 3-column matrix 
+#' corresponding to its first element, \code{est}.  
 #' @param theta An object containing ability estimates, as output by function
 #' \code{mlebme} or \code{eap}.  If \code{NULL}, MLE will be estimated from
 #' \code{resp} and \code{ip}.
@@ -380,7 +384,7 @@ tsc = function(ip, theta){
 #' @export
 #' @examples
 #' 
-#' scp(Scored, Scored2pl$est)
+#' scp(Scored, Scored2pl)
 #' 
 scp = function(resp, ip, theta=NULL) {
   if (is.null(theta)) theta=mlebme(resp,ip)
@@ -395,3 +399,55 @@ scp = function(resp, ip, theta=NULL) {
 	points(theta[,1], ts[,1]+ts[,2], type="l")
 	points(theta[,1], os, co="red")
 }  
+
+
+#' Plot empirical response function
+#' 
+#' Produces a plot of the empirical response function (proportion of correct 
+#' responses at each possible sum score).
+#' 
+#' 
+#' @param resp A matrix of binary responses to a test, with persons as rows and
+#' items as columns.
+#' @param item The item (column number in \code{resp}) to plot.
+#' @return None
+#' @author Ivailo Partchev
+#' @keywords models
+#' @export
+#' @examples
+#' 
+#' erf(Scored, 3)
+#' 
+erf = function(resp, item){
+  resp[is.na(resp)] = 0
+  ss = rowSums(resp)
+  x = sort(unique(ss))
+  y = tapply(resp[,item], ss, mean)
+  plot(x, y, main=paste("Item", item), xlab="Observed scores", ylab="Probability", pch=19)
+  cbind(x,y)
+}
+
+
+
+#' Sum score metric
+#' 
+#' From a set of estimated item parameters, compute an item response function in sum score
+#' metric, i.e., the probabilities of a correct response predicted by the model at abilities
+#' corresponding to the possible (raw) sum scores. 
+#' 
+#' 
+#' @param ip Item parameters: the output of \code{est}, or a 3-column matrix 
+#' corresponding to its first element, \code{est}.  
+#' @return An object with the same structure as the output of \code{irf}
+#' @author Ivailo Partchev
+#' @keywords models
+#' @export
+#' 
+scoreMetric = function(ip) {
+  if (is.list(ip)) ip=ip$est
+  tf = trf(ip)
+  y = irf(ip=ip, x=approx(tf$f, tf$x, 0:nrow(ip), rule=2)$y)
+  y$f[nrow(y$f),] = 1.0
+  if (all(ip[,3]==0)) y$f[1,] = 0.0
+  y
+}

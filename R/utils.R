@@ -5,7 +5,7 @@
 #' 
 #' @param ip Item parameters: a matrix with one row per item, and three
 #' columns: [,1] item discrimination \eqn{a}, [,2] item difficulty \eqn{b}, and
-#' [,3] asymptote \eqn{c}.
+#' [,3] asymptote \eqn{c}. Can also use the object returned by \code{est}.
 #' @param x A vector of values of the latent variable ("abilities").
 #' @return A matrix of responses: persons as rows, items as columns, entries
 #' are either 0 or 1, no missing data
@@ -18,7 +18,8 @@
 #' rs <- sim(ip=pa, x=rnorm(1000))
 #' 
 sim = function(ip, x=NULL) {
-  i = irf(ip,x)
+  if (is.list(ip)) ip=ip$est
+  i = irf(ip=ip, x=x)
   d = dim(i$f)
   u = runif(d[1]*d[2])
   dim(u) = d
@@ -118,14 +119,14 @@ tia = function(choices, key, ...) {
   list(testlevel=list(alpha=alpha),itemlevel=tsk,optionlevel=itr)
 }
 
-#' Approximate tetrachoric correlation matrix
+#' Approximate tetchoric correlation matrix
 #' 
-#' Matrix of tetrachoric correlations using the approximation by 
+#' Matrix of tetchoric correlations using the approximation by 
 #' Bonett and Price (2005).
 #' 
 #' @param d a matrix (or data frame, which will be converted to a matrix) containing
 #' only zeroes an ones. NAs are not allowed.
-#' @return A matrix of approximate tetrachoric correlations. 
+#' @return A matrix of approximate tetchoric correlations. 
 #' @author Ivailo Partchev
 #' @references Douglas G. Bonett and Robert M. Price (2005). Inferential Methods for the 
 #' Tetrachoric Correlation Coefficient. Journal of Educational and Behavioral Statistics,
@@ -134,7 +135,7 @@ tia = function(choices, key, ...) {
 #' @export
 #' @examples
 #' 
-#' tetras <- tet(Scored)
+#' tets <- tet(Scored)
 #' 
 tet <- function (d) {
   d = as.matrix(d)

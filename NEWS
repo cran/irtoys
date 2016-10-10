@@ -1,3 +1,17 @@
+New in 0.2.0
+
+* Added functions to estimate and plot the interaction model
+
+* Added erf, a function to plot the empirical item response function
+
+* Added ssm, a function to produce IRF in the sum score metric
+
+* Added ifp, a function to plot IRF with error bounds. 
+
+* Small improvements in the tia function
+
+* Links to download Brad Hanson's ICL program (see the package help page)
+
 			      CHANGES IN irtoys VERSION 0.1.7
 NEW FEATURES
 
