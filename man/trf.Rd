@@ -32,11 +32,10 @@ A common use of this function would be to obtain a plot of the TRF.
 plot(trf(Scored2pl))
 
 }
-\author{
-Ivailo Partchev
-}
 \seealso{
 \code{\link{plot.trf}}, \code{\link{irf}}
 }
+\author{
+Ivailo Partchev
+}
 \keyword{models}
-

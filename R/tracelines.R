@@ -29,7 +29,7 @@
 #' @author Ivailo Partchev
 #' @seealso \code{\link{plot.irf}}
 #' @keywords models
-#' @export
+#' 
 #' @examples
 #' 
 #' plot(irf(Scored2pl, item=1))
@@ -71,7 +71,7 @@ irf = function(ip,items=NULL,x=NULL) {
 #' @seealso \code{\link{irf}}
 #' @keywords models
 #' @method plot irf
-#' @export
+#' 
 #' @examples
 #' 
 #' # plot IRF for all items in red, label with item number
@@ -115,7 +115,7 @@ plot.irf = function(x,
 #' @author Ivailo Partchev
 #' @seealso \code{\link{plot.trf}}, \code{\link{irf}}
 #' @keywords models
-#' @export
+#' 
 #' @examples
 #' 
 #' plot(trf(Scored2pl))
@@ -148,7 +148,7 @@ trf = function(ip, x=NULL) {
 #' @seealso \code{\link{trf}}
 #' @keywords models
 #' @method plot trf
-#' @export
+#' 
 #' @examples
 #' 
 #' plot(trf(Scored2pl))
@@ -187,7 +187,7 @@ plot.trf = function(x,
 #' @author Ivailo Partchev
 #' @seealso \code{\link{plot.iif}}, \code{\link{irf}}
 #' @keywords models
-#' @export
+#' 
 #' @examples
 #' 
 #' plot(iif(Scored2pl, items=1:3))
@@ -233,7 +233,7 @@ iif = function(ip, items=NULL, x=NULL) {
 #' @seealso \code{\link{iif}}
 #' @keywords models
 #' @method plot iif
-#' @export
+#' 
 #' @examples
 #' 
 #' # plot IIF for all items in red, label with item number
@@ -278,7 +278,7 @@ plot.iif = function(x,
 #' @author Ivailo Partchev
 #' @seealso \code{\link{plot.tif}}, \code{\link{iif}}
 #' @keywords models
-#' @export
+#' 
 #' @examples
 #' 
 #' plot(trf(Scored2pl))
@@ -311,7 +311,7 @@ tif = function(ip, x=NULL) {
 #' @seealso \code{\link{tif}}
 #' @keywords models
 #' @method plot tif
-#' @export
+#' 
 #' @examples
 #' 
 #' plot(tif(Scored2pl))
@@ -340,7 +340,7 @@ plot.tif = function(x, add=FALSE, main="Test information function", co=1, ...) {
 #' @author Ivailo Partchev
 #' @seealso \code{\link{mlebme}}, \code{\link{eap}}, \code{\link{trf}}
 #' @keywords models
-#' @export
+#' 
 #' @examples
 #' 
 #' th <- mlebme(resp=Scored, ip=Scored2pl)
@@ -381,7 +381,7 @@ tsc = function(ip, theta){
 #' @seealso \code{\link{mlebme}}, \code{\link{eap}}, \code{\link{tsc}},
 #' \code{\link{trf}}
 #' @keywords models
-#' @export
+#' 
 #' @examples
 #' 
 #' scp(Scored, Scored2pl)
@@ -413,7 +413,7 @@ scp = function(resp, ip, theta=NULL) {
 #' @return None
 #' @author Ivailo Partchev
 #' @keywords models
-#' @export
+#' 
 #' @examples
 #' 
 #' erf(Scored, 3)
@@ -441,7 +441,7 @@ erf = function(resp, item){
 #' @return An object with the same structure as the output of \code{irf}
 #' @author Ivailo Partchev
 #' @keywords models
-#' @export
+#' 
 #' 
 scoreMetric = function(ip) {
   if (is.list(ip)) ip=ip$est

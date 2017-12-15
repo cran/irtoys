@@ -33,11 +33,10 @@ distribution of ability
 plval <- dpv(resp=Scored, ip=Scored2pl)
 
 }
-\author{
-Ivailo Partchev
-}
 \seealso{
 \code{\link{mlebme}}, \code{\link{eap}}
 }
+\author{
+Ivailo Partchev
+}
 \keyword{models}
-

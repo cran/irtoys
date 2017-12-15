@@ -1,9 +1,11 @@
 Package: irtoys
 Type: Package
 Title: A Collection of Functions Related to Item Response Theory (IRT)
-Version: 0.2.0
-Date: 2016-10-10
-Author: Ivailo Partchev
+Version: 0.2.1
+Date: 2017-12-15
+Authors@R: c(person("Ivailo", "Partchev", email = "partchev@gmail.com", role = c("aut","cre")), 
+  person("Gunter", "Maris", email = "Gunter.Maris@act.org", role = "aut"),
+  person("Tamaki", "Hattori", role = "ctb"))
 Maintainer: Ivailo Partchev <partchev@gmail.com>
 Description: A collection of functions useful in learning and practicing IRT,
     which can be combined into larger programs. Provides basic CTT analysis,
@@ -23,8 +25,11 @@ Collate: 'ability.R' 'estimate.R' 'itemfit.R' 'nonpar.R' 'readin.R'
         'scale.R' 'tracelines.R' 'utils.R' 'irtoys-package.R'
         'interaction.R'
 VignetteBuilder: knitr
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
 NeedsCompilation: yes
-Packaged: 2016-10-10 10:06:55 UTC; ivailo
+Packaged: 2017-12-15 12:47:57 UTC; ivailo
+Author: Ivailo Partchev [aut, cre],
+  Gunter Maris [aut],
+  Tamaki Hattori [ctb]
 Repository: CRAN
-Date/Publication: 2016-10-10 13:51:54
+Date/Publication: 2017-12-15 13:33:18 UTC

@@ -110,7 +110,7 @@ grp = function(theta, bins=9, breaks=NULL, equal="count", type="means") {
 #' Multiple-Group IRT Analysis and Test Maintenance for Binary Items, SSI
 #' Scientific Software International, Chicago, IL
 #' @keywords models
-#' @export
+#' 
 #' @examples
 #' 
 #' fit   <- itf(resp=Scored, ip=Scored2pl, item=7)
@@ -175,7 +175,7 @@ itf = function(resp, ip, item, stat = "lr", theta,
 #' standardized indices. British Journal of Mathematical and Statistical
 #' Psychology, 38, 67--80
 #' @keywords models
-#' @export
+#' 
 #' @examples
 #' 
 #' api(Scored, Scored2pl)

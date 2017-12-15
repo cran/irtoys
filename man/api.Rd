@@ -27,14 +27,13 @@ Computes the api appropriateness index, a measure of person fit in IRT models
 api(Scored, Scored2pl)
 
 }
-\author{
-Ivailo Partchev
-}
 \references{
 Drasgow, F., Levine, M. V., & Williams, E. A. (1985).
 Appropriateness measurement with polychotomous item response models and
 standardized indices. British Journal of Mathematical and Statistical
 Psychology, 38, 67--80
 }
+\author{
+Ivailo Partchev
+}
 \keyword{models}
-

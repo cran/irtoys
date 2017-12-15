@@ -19,11 +19,10 @@ file produced with the \code{write_latent_dist file} command in ICL.
 Quadrature objects are used when estimating abilities with \code{eap} and
 for some of the scaling methods in \code{sca}.
 }
-\author{
-Ivailo Partchev
-}
 \seealso{
 \code{\link{normal.qu}}, \code{\link{eap}}, \code{\link{sca}}
 }
+\author{
+Ivailo Partchev
+}
 \keyword{models}
-

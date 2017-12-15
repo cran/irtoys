@@ -32,11 +32,10 @@ A common use of this function would be to obtain a plot of the TIF.
 plot(trf(Scored2pl))
 
 }
-\author{
-Ivailo Partchev
-}
 \seealso{
 \code{\link{plot.tif}}, \code{\link{iif}}
 }
+\author{
+Ivailo Partchev
+}
 \keyword{models}
-

@@ -28,4 +28,3 @@ erf(Scored, 3)
 Ivailo Partchev
 }
 \keyword{models}
-

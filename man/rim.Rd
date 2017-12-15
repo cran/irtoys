@@ -32,11 +32,10 @@ the interaction model, for one, several, or all items in the test.
 rim(Scored, items=2)
 
 }
-\author{
-Ivailo Partchev, using theory and C code by Gunter Maris
-}
 \seealso{
 \code{\link{interactionModel}}
 }
+\author{
+Ivailo Partchev, using theory and C code by Gunter Maris
+}
 \keyword{models}
-

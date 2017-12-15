@@ -21,13 +21,12 @@ A matrix
 Estimates the parameters of the interaction model. The plots can be produced with the
 appropriate plotting method.
 }
-\author{
-Ivailo Partchev, using C code and theory by Gunter Maris
-}
 \references{
 Shelby Haberman. The interaction model. Chapter in: 
 Mathias von Davier & Claus H. Carstensen (Eds.) (2007). 
 Multivariate and Mixture Distribution Rasch Models. New York:Springer
 }
+\author{
+Ivailo Partchev, using C code and theory by Gunter Maris
+}
 \keyword{models}
-

@@ -29,11 +29,10 @@ Useful for plotting test information functions. The \code{x} argument of
 plot(tif(Scored2pl))
 
 }
-\author{
-Ivailo Partchev
-}
 \seealso{
 \code{\link{tif}}
 }
+\author{
+Ivailo Partchev
+}
 \keyword{models}
-

@@ -15,7 +15,7 @@
 #' \eqn{c}. For the 1PL and 2PL models, all asymptotes are equal to 0; for the
 #' 1PL, the discriminations are all equal but not necessarily equal to 1. 
 #' @author Ivailo Partchev
-#' @export
+#' 
 #' @keywords data
 read.ip.bilog = function(file) {
   p = read.fwf(file=file, widths=c(8,8,rep(10,13),4,1,1), skip=4, header=FALSE)
@@ -61,7 +61,7 @@ read.ip.bilog = function(file) {
 #' \eqn{c}. For the 1PL and 2PL models, all asymptotes are equal to 0; for the
 #' 1PL, the discriminations are all equal but not necessarily equal to 1.
 #' @author Ivailo Partchev
-#' @export
+#' 
 #' @keywords models
 read.ip.icl = function(file) {
   return(list(est=matrix(scan(file),ncol=4,byrow=TRUE)[,-1],se=NULL,vcm=NULL))
@@ -80,7 +80,7 @@ read.ip.icl = function(file) {
 #' @return A list of: \item{quad.points}{A vector of quadrature points}
 #' \item{quad.weights}{A vector of the corresponding quadrature weights}
 #' @author Ivailo Partchev
-#' @export
+#' 
 #' @seealso \code{\link{normal.qu}}, \code{\link{eap}}, \code{\link{sca}}
 #' @keywords models
 read.qu.icl = function(file) {
@@ -114,10 +114,10 @@ read.qu.icl = function(file) {
 #' @return A matrix, typically of zeroes and ones, representing the correct or
 #' wrong responses given by persons (rows) to items (columns).
 #' @author Ivailo Partchev
-#' @export
+#' 
 #' @seealso \code{\link{sco}}, \code{\link{tgf}},
 #' @keywords IO
-#' @export
+#' 
 #' @examples
 #' 
 #' \dontrun{

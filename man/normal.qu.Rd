@@ -37,11 +37,10 @@ the scaling methods in \code{sca}.
 quad <- normal.qu(n=20)
 
 }
-\author{
-Ivailo Partchev
-}
 \seealso{
 \code{\link{read.qu.icl}}, \code{\link{eap}}, \code{\link{sca}}
 }
+\author{
+Ivailo Partchev
+}
 \keyword{models}
-

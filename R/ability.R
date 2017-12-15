@@ -16,7 +16,7 @@
 #' @author Ivailo Partchev
 #' @seealso \code{\link{mlebme}}, \code{\link{eap}}, \code{\link{wle}}, \code{\link{dpv}}, \code{\link{qrs}}
 #' @keywords models
-#' @export
+#' 
 #' @examples
 #' 
 #' theta <- ability(resp=Scored, method="WLE", ip=Scored2pl)
@@ -79,7 +79,7 @@ mle.one = function(resp, ip, mu=mu, sigma=sigma, method=method) {
 #' points} \item{quad.weights}{A vector of the corresponding quadrature
 #' weights}
 #' @author Ivailo Partchev
-#' @export
+#' 
 #' @seealso \code{\link{read.qu.icl}}, \code{\link{eap}}, \code{\link{sca}}
 #' @keywords models
 #' @examples
@@ -123,7 +123,7 @@ normal.qu = function(n=15,lower=-4,upper=4,mu=0,sigma=1,scaling="points"){
 #' @author Ivailo Partchev
 #' @seealso \code{\link{eap}}
 #' @keywords models
-#' @export
+#' 
 #' @examples
 #' 
 #' th.mle <- mlebme(resp=Scored, ip=Scored2pl)
@@ -201,7 +201,7 @@ scf = function(x,re,p) {
 #' @references Warm T.A. (1989) Weighted Likelihood Estimation of Ability in
 #' Item Response Theory. Psychometrika, 54, 427-450.
 #' @keywords models
-#' @export
+#' 
 #' @examples
 #' 
 #' th.bce <- wle(resp=Scored, ip=Scored2pl)
@@ -252,7 +252,7 @@ eap.one = function(r, p, qp, qw) {
 #' @seealso \code{\link{mlebme}}, \code{\link{normal.qu}},
 #' \code{\link{read.qu.icl}}
 #' @keywords models
-#' @export
+#' 
 #' @examples
 #' 
 #' th.eap <- eap(resp=Scored, ip=Scored2pl, qu=normal.qu())
@@ -323,7 +323,7 @@ dpv.one = function(resp, ip, n=5, mu, s) {
 #' @author Ivailo Partchev
 #' @seealso \code{\link{mlebme}}, \code{\link{eap}}
 #' @keywords models
-#' @export
+#' 
 #' @examples
 #' 
 #' plval <- dpv(resp=Scored, ip=Scored2pl)

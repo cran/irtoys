@@ -39,11 +39,10 @@ A common use of this function would be to obtain a plot of the IIF.
 plot(iif(Scored2pl, items=1:3))
 
 }
-\author{
-Ivailo Partchev
-}
 \seealso{
 \code{\link{plot.iif}}, \code{\link{irf}}
 }
+\author{
+Ivailo Partchev
+}
 \keyword{models}
-

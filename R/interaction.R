@@ -14,7 +14,7 @@
 #' Mathias von Davier & Claus H. Carstensen (Eds.) (2007). 
 #' Multivariate and Mixture Distribution Rasch Models. New York:Springer 
 #' @keywords models
-#' @export
+#' 
 interactionModel = function(x, eps=1e-1, rasch=FALSE) {
   # not sure if I can handle NAs -- remove until I find out
   x[is.na(x)] = 0
@@ -62,7 +62,7 @@ interactionModel = function(x, eps=1e-1, rasch=FALSE) {
 #' @seealso \code{\link{interactionModel}}
 #' @keywords models
 #' @method plot imp
-#' @export
+#' 
 #' @examples
 #' 
 #' plot(interactionModel(Scored), highlight=-.3)
@@ -180,7 +180,7 @@ elsym = function(b) {
 #' @author Ivailo Partchev, using theory and C code by Gunter Maris
 #' @seealso \code{\link{interactionModel}}
 #' @keywords models
-#' @export
+#' 
 #' @examples
 #' 
 #' rim(Scored, items=2)

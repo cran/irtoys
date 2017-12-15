@@ -27,4 +27,3 @@ file;} command in BILOG.
 Ivailo Partchev
 }
 \keyword{data}
-

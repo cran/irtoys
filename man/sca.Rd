@@ -68,9 +68,6 @@ text(pa[21:50,2], pa.sc$scaled.ip[,2], 21:50, co=3)
 }
 
 }
-\author{
-Ivailo Partchev and Tamaki Hattori
-}
 \references{
 Kolen, M.J. & R.L. Brennan (1995) Test Equating: Methods and
 Practices. Springer.
@@ -79,5 +76,7 @@ Haebara, T. (1980) Equating logistic ability scales by
 a weighted lest squares method. Japanese Psychological Research, 22,
 p.144--149
 }
+\author{
+Ivailo Partchev and Tamaki Hattori
+}
 \keyword{models}
-

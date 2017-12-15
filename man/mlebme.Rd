@@ -36,11 +36,10 @@ direct optimization
 th.mle <- mlebme(resp=Scored, ip=Scored2pl)
 
 }
-\author{
-Ivailo Partchev
-}
 \seealso{
 \code{\link{eap}}
 }
+\author{
+Ivailo Partchev
+}
 \keyword{models}
-

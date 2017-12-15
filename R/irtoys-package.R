@@ -39,11 +39,11 @@
 #' occasionally encountered with this site, I have set up an alternative
 #' source:
 #' 
-#' For Linux: \url{https://dl.dropboxusercontent.com/u/31225257/icl_linux.tar.gz}
+#' For Linux: \url{https://www.dropbox.com/s/ks72ow7aznmasqd/icl_linux.tar.gz?dl=0}
 #' 
-#' For Windows: \url{https://dl.dropboxusercontent.com/u/31225257/icl_win.zip}
+#' For Windows: \url{https://www.dropbox.com/s/783ka4q3ifkh4ir/icl_win.zip?dl=0}
 #' 
-#' For Macintosh: \url{https://dl.dropboxusercontent.com/u/31225257/icl_mac.sea.bin}
+#' For Macintosh: \url{https://www.dropbox.com/s/z9kji73r59m4pbf/icl_mac.sea.bin?dl=0}
 #' 
 #' BILOG is commercial software sold by SSI ---
 #' see \url{www.ssicentral.com} for further detail.

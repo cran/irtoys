@@ -35,11 +35,10 @@ plot(irf(Scored2pl), co="red", label=TRUE)
 plot(irf(Scored2pl, items=c(2,3,7)), co=NA)
 
 }
-\author{
-Ivailo Partchev
-}
 \seealso{
 \code{\link{irf}}
 }
+\author{
+Ivailo Partchev
+}
 \keyword{models}
-

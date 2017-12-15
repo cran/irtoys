@@ -28,11 +28,10 @@ th <- mlebme(resp=Scored, ip=Scored2pl)
 tsc(Scored2pl, th)
 
 }
-\author{
-Ivailo Partchev
-}
 \seealso{
 \code{\link{mlebme}}, \code{\link{eap}}, \code{\link{trf}}
 }
+\author{
+Ivailo Partchev
+}
 \keyword{models}
-

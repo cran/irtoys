@@ -119,7 +119,7 @@ adv.scale = function(sp,np,sq=NULL,nq=NULL,haeb=FALSE,bec=FALSE) {
 #' a weighted lest squares method. Japanese Psychological Research, 22,
 #' p.144--149
 #' @keywords models
-#' @export
+#' 
 #' @examples
 #' 
 #' \dontrun{

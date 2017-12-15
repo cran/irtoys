@@ -33,11 +33,10 @@ A wrapper around all functions for ability estimation
 theta <- ability(resp=Scored, method="WLE", ip=Scored2pl)
 
 }
-\author{
-Ivailo Partchev
-}
 \seealso{
 \code{\link{mlebme}}, \code{\link{eap}}, \code{\link{wle}}, \code{\link{dpv}}, \code{\link{qrs}}
 }
+\author{
+Ivailo Partchev
+}
 \keyword{models}
-

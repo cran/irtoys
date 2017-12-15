@@ -37,11 +37,10 @@ Plot the item-total regressions fit by the interaction (or Rasch) model
 plot(interactionModel(Scored), highlight=-.3)
 
 }
-\author{
-Ivailo Partchev, using theory and C code by Gunter Maris
-}
 \seealso{
 \code{\link{interactionModel}}
 }
+\author{
+Ivailo Partchev, using theory and C code by Gunter Maris
+}
 \keyword{models}
-

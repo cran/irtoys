@@ -30,4 +30,3 @@ rs <- sim(ip=pa, x=rnorm(1000))
 Ivailo Partchev
 }
 \keyword{models}
-

@@ -30,12 +30,11 @@ sum scores are shown in red.
 scp(Scored, Scored2pl)
 
 }
-\author{
-Ivailo Partchev
-}
 \seealso{
 \code{\link{mlebme}}, \code{\link{eap}}, \code{\link{tsc}},
 \code{\link{trf}}
 }
+\author{
+Ivailo Partchev
+}
 \keyword{models}
-

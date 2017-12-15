@@ -1,4 +1,4 @@
-useDynLib(irtoys)
+useDynLib(irtoys, .registration = TRUE)
 import(ltm)
 import(sm)
 importFrom("graphics", "lines", "mtext", "plot", "points", "polygon",

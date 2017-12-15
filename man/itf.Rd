@@ -104,9 +104,6 @@ can be found in the BILOG output. Also of interest is the fit in 2- and
 fit   <- itf(resp=Scored, ip=Scored2pl, item=7)
 
 }
-\author{
-Ivailo Partchev
-}
 \references{
 S. E. Embretson and S. P. Reise (2000), Item Response Theory for
 Psychologists, Lawrence Erlbaum Associates, Mahwah, NJ
@@ -118,5 +115,7 @@ Scientific Software International, Chicago, IL
 \seealso{
 \code{\link{eap}}, \code{\link{qrs}}
 }
+\author{
+Ivailo Partchev
+}
 \keyword{models}
-

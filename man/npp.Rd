@@ -52,9 +52,6 @@ npp(Scored, items=7, bands=TRUE)
 plot(irf(ip=Scored2pl, items=7), co=3, add=TRUE)
 
 }
-\author{
-Ivailo Partchev
-}
 \references{
 James O. Ramsay (2000). TestGraf: A program for the graphical
 analysis of multiple choice test and questionnaire data. McGill University,
@@ -63,5 +60,7 @@ Montreal, Canada
 \seealso{
 \code{\link{qrs}}, \code{\link{irf}}, \code{\link{plot.irf}}
 }
+\author{
+Ivailo Partchev
+}
 \keyword{models}
-

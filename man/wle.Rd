@@ -27,9 +27,6 @@ consisting of either uniformly wrong or uniformly correct responses.
 th.bce <- wle(resp=Scored, ip=Scored2pl)
 
 }
-\author{
-Ivailo Partchev
-}
 \references{
 Warm T.A. (1989) Weighted Likelihood Estimation of Ability in
 Item Response Theory. Psychometrika, 54, 427-450.
@@ -37,5 +34,7 @@ Item Response Theory. Psychometrika, 54, 427-450.
 \seealso{
 \code{\link{mlebme}}, \code{\link{eap}}
 }
+\author{
+Ivailo Partchev
+}
 \keyword{models}
-

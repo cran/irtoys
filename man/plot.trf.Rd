@@ -29,11 +29,10 @@ Useful for plotting test response functions. The \code{x} argument of
 plot(trf(Scored2pl))
 
 }
-\author{
-Ivailo Partchev
-}
 \seealso{
 \code{\link{trf}}
 }
+\author{
+Ivailo Partchev
+}
 \keyword{models}
-

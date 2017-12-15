@@ -35,11 +35,10 @@ plot(iif(Scored2pl), co="red", label=TRUE)
 plot(iif(Scored2pl, items=c(2,3,7)), co=NA)
 
 }
-\author{
-Ivailo Partchev
-}
 \seealso{
 \code{\link{iif}}
 }
+\author{
+Ivailo Partchev
+}
 \keyword{models}
-

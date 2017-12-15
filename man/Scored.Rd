@@ -10,4 +10,3 @@ Real-life data set containing the responses to a test, scored as true or
 false.
 }
 \keyword{datasets}
-

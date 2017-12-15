@@ -30,7 +30,7 @@
 #' by \code{sm}, otherwise the Bayes theorem will be used. Default is FALSE.
 #' @author Ivailo Partchev
 #' @seealso \code{\link{irf}}, \code{\link{npp}}, \code{\link{tgf}}
-#' @export
+#' 
 #' @examples
 #' 
 #' # a plot for item 5 
@@ -114,7 +114,7 @@ irfPlot = function(resp, ip, x=NULL, item, main="Parametric vs non-parametric tr
 #' analysis of multiple choice test and questionnaire data. McGill University,
 #' Montreal, Canada
 #' @keywords models
-#' @export
+#' 
 #' @examples
 #' 
 #' # plot items 1:5 in different colours, label
@@ -159,7 +159,7 @@ npp = function(resp, x, items, from=-4, to=4, co=1,
 #' @author Ivailo Partchev
 #' @seealso \code{\link{npp}}, \code{\link{itf}}
 #' @keywords models
-#' @export
+#' 
 #' @examples
 #' 
 #' sc <- qrs(Scored)
@@ -196,7 +196,7 @@ qrs = function(resp) {
 #' analysis of multiple choice test and questionnaire data. McGill University,
 #' Montreal, Canada
 #' @keywords models
-#' @export
+#' 
 #' @examples
 #' 
 #' key=c(2,3,1,1,4,1,2,1,2,3,3,4,3,4,2,2,4,3)

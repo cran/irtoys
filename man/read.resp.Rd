@@ -43,11 +43,10 @@ change all NA to 0.
 }
 
 }
-\author{
-Ivailo Partchev
-}
 \seealso{
 \code{\link{sco}}, \code{\link{tgf}},
 }
+\author{
+Ivailo Partchev
+}
 \keyword{IO}
-

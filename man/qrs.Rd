@@ -26,11 +26,10 @@ Jim Ramsay's TestGraf. Another possible use is in \code{\link{itf}}.
 sc <- qrs(Scored)
 
 }
-\author{
-Ivailo Partchev
-}
 \seealso{
 \code{\link{npp}}, \code{\link{itf}}
 }
+\author{
+Ivailo Partchev
+}
 \keyword{models}
-

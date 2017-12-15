@@ -51,10 +51,9 @@ by the underlying software (currently only available with ICL).
 irfPlot(Scored, ip=b3, item=4)
 
 }
-\author{
-Ivailo Partchev
-}
 \seealso{
 \code{\link{irf}}, \code{\link{npp}}, \code{\link{tgf}}
 }
-
+\author{
+Ivailo Partchev
+}

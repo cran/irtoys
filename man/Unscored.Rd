@@ -14,4 +14,3 @@ package: \code{scoreResponses} and \code{tgf}. All other functions expect binary
 which can be produced with \code{scoreResponses}.
 }
 \keyword{datasets}
-

@@ -22,13 +22,12 @@ Bonett and Price (2005).
 tets <- tet(Scored)
 
 }
-\author{
-Ivailo Partchev
-}
 \references{
 Douglas G. Bonett and Robert M. Price (2005). Inferential Methods for the 
 Tetrachoric Correlation Coefficient. Journal of Educational and Behavioral Statistics,
 Vol. 30, No. 2, pp. 213--225
 }
+\author{
+Ivailo Partchev
+}
 \keyword{models}
-

@@ -29,12 +29,11 @@ variable ("ability") for each person.
 th.eap <- eap(resp=Scored, ip=Scored2pl, qu=normal.qu())
 
 }
-\author{
-Ivailo Partchev
-}
 \seealso{
 \code{\link{mlebme}}, \code{\link{normal.qu}},
 \code{\link{read.qu.icl}}
 }
+\author{
+Ivailo Partchev
+}
 \keyword{models}
-

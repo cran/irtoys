@@ -11,7 +11,7 @@
 #' are either 0 or 1, no missing data
 #' @author Ivailo Partchev
 #' @keywords models
-#' @export
+#' 
 #' @examples
 #' 
 #' pa <- cbind(runif(20,.8,2), runif(20,-2.4,2.4), rep(0,50))
@@ -42,7 +42,7 @@ sim = function(ip, x=NULL) {
 #' @return A matrix of responses scored 0=wrong 1=correct, and possibly NA
 #' @author Ivailo Partchev
 #' @keywords models
-#' @export
+#' 
 #' @examples
 #' 
 #' res <- sco(Unscored, key=c(2,3,1,1,4,1,2,1,2,3,3,4,3,4,2,2,4,3))
@@ -87,7 +87,7 @@ sco = function(choices, key, na.false=FALSE) {
 #' }
 #' @author Ivailo Partchev
 #' @keywords models
-#' @export
+#' 
 #' @examples
 #' 
 #' itemsum <- tia(Unscored, key=c(2,3,1,1,4,1,2,1,2,3,3,4,3,4,2,2,4,3))
@@ -132,7 +132,7 @@ tia = function(choices, key, ...) {
 #' Tetrachoric Correlation Coefficient. Journal of Educational and Behavioral Statistics,
 #' Vol. 30, No. 2, pp. 213--225
 #' @keywords models
-#' @export
+#' 
 #' @examples
 #' 
 #' tets <- tet(Scored)

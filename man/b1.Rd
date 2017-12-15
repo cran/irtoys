@@ -11,4 +11,3 @@ the example data set \code{Scored}. These are provided because not users will
 have BILOG-MG available.
 }
 \keyword{datasets}
-

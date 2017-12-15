@@ -22,4 +22,3 @@ corresponding to the possible (raw) sum scores.
 Ivailo Partchev
 }
 \keyword{models}
-

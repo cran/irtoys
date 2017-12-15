@@ -44,11 +44,10 @@ A common use of this function would be to obtain a plot of the IRF.
 plot(irf(Scored2pl, item=1))
 
 }
-\author{
-Ivailo Partchev
-}
 \seealso{
 \code{\link{plot.irf}}
 }
+\author{
+Ivailo Partchev
+}
 \keyword{models}
-

@@ -269,7 +269,7 @@ est.ltm = function(resp, model, omitsWrong, nqp, rasch) {
 #' Multiple-Group IRT Analysis and Test Maintenance for Binary Items, SSI
 #' Scientific Software International, Chicago, IL.  \url{www.ssicentral.com}
 #' @keywords models
-#' @export
+#' 
 #' @examples
 #' 
 #' p.1pl <- est(Scored, model="1PL", engine="ltm")

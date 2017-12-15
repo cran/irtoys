@@ -133,9 +133,6 @@ p.1pl <- est(Scored, model="1PL", engine="ltm")
 p.2pl <- est(Scored, model="2PL", engine="ltm")
 
 }
-\author{
-Ivailo Partchev
-}
 \references{
 Bradley A. Hanson (2002), ICL: IRT Command Language.
 \url{www.b-a-h.com}
@@ -147,5 +144,7 @@ M. F. Zimowski, E. Muraki, R. J. Mislevy and R. D. Bock (1996), BILOG--MG.
 Multiple-Group IRT Analysis and Test Maintenance for Binary Items, SSI
 Scientific Software International, Chicago, IL.  \url{www.ssicentral.com}
 }
+\author{
+Ivailo Partchev
+}
 \keyword{models}
-

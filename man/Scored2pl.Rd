@@ -11,4 +11,3 @@ the example data set \code{Scored}. These are provided as a check, and to
 speed up the examples for the various functions in the package.
 }
 \keyword{datasets}
-
