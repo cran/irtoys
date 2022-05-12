@@ -4,8 +4,16 @@
 \alias{sca}
 \title{Linear transformation of the IRT scale}
 \usage{
-sca(old.ip, new.ip, old.items, new.items, old.qu = NULL, new.qu = NULL,
-  method = "MS", bec = FALSE)
+sca(
+  old.ip,
+  new.ip,
+  old.items,
+  new.items,
+  old.qu = NULL,
+  new.qu = NULL,
+  method = "MS",
+  bec = FALSE
+)
 }
 \arguments{
 \item{old.ip}{A set of parameters that are already on the desired scale}

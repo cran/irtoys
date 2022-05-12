@@ -4,10 +4,21 @@
 \alias{est}
 \title{Estimate item parameters}
 \usage{
-est(resp, model = "2PL", engine = "icl", omitsWrong = FALSE, nqp = 20,
-  est.distr = FALSE, nch = 5, a.prior = TRUE, b.prior = FALSE,
-  c.prior = TRUE, bilog.defaults = TRUE, rasch = FALSE,
-  run.name = "mymodel")
+est(
+  resp,
+  model = "2PL",
+  engine = "icl",
+  omitsWrong = FALSE,
+  nqp = 20,
+  est.distr = FALSE,
+  nch = 5,
+  a.prior = TRUE,
+  b.prior = FALSE,
+  c.prior = TRUE,
+  bilog.defaults = TRUE,
+  rasch = FALSE,
+  run.name = "mymodel"
+)
 }
 \arguments{
 \item{resp}{A matrix of responses: persons as rows, items as columns,
@@ -83,7 +94,7 @@ asymptote for item \eqn{j}.
 
 Some authors prefer to represent the model with a logit \eqn{1.7a^*_j(\theta_i-b_j)}
 rather than \eqn{a_j(\theta_i-b_j)}. This option has been removed from \code{irtoys}
-as it is not supported by the remaining functions of the package.
+as it is not supported by the remaining functions of the package.  
 
 In the 2PL model (\code{model="2PL"}), all asymptotes \eqn{c_j} are 0. In
 the 1PL model (\code{model="1PL"}), all asymptotes \eqn{c_j} are 0 and the
@@ -120,9 +131,9 @@ be the ICL default ones, and based on the 4-parameter beta distribution:
 
 \code{est} only works when some IRT software is installed.  Package
 \code{ltm} is automatically loaded. ICL can be downloaded from
-\url{www.b-a-h.com}. Alternative links are provided in the help screen for 
-this package. BILOG is commercial software sold by SSI --- see
-\url{www.ssicentral.com} for further detail.  On Windows, make sure that the
+\url{http://www.openirt.com/b-a-h/software/}. 
+BILOG is commercial software sold by SSI --- see
+\url{https://ssicentral.com/} for further detail.  On Windows, make sure that the
 executable files (\code{icl.exe} for ICL, \code{blm1.exe}, \code{blm2.exe},
 and \code{blm3.exe}, for BILOG) are located in directories that are included
 in the PATH variable.
@@ -132,17 +143,6 @@ in the PATH variable.
 p.1pl <- est(Scored, model="1PL", engine="ltm")
 p.2pl <- est(Scored, model="2PL", engine="ltm")
 
-}
-\references{
-Bradley A. Hanson (2002), ICL: IRT Command Language.
-\url{www.b-a-h.com}
-
-Dimitris Rizopoulos (2006). ltm: Latent Trait Models under IRT.
-\url{cran.r-project.org}
-
-M. F. Zimowski, E. Muraki, R. J. Mislevy and R. D. Bock (1996), BILOG--MG.
-Multiple-Group IRT Analysis and Test Maintenance for Binary Items, SSI
-Scientific Software International, Chicago, IL.  \url{www.ssicentral.com}
 }
 \author{
 Ivailo Partchev

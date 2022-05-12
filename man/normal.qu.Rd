@@ -4,8 +4,7 @@
 \alias{normal.qu}
 \title{Normal quadrature points and weights}
 \usage{
-normal.qu(n = 15, lower = -4, upper = 4, mu = 0, sigma = 1,
-  scaling = "points")
+normal.qu(n = 15, lower = -4, upper = 4, mu = 0, sigma = 1, scaling = "points")
 }
 \arguments{
 \item{n}{Number of quadrature points}

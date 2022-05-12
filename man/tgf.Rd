@@ -4,8 +4,14 @@
 \alias{tgf}
 \title{Non-parametric option curves}
 \usage{
-tgf(choices, key, item, main = "Non-parametric response function", co = 1,
-  label = FALSE)
+tgf(
+  choices,
+  key,
+  item,
+  main = "Non-parametric response function",
+  co = 1,
+  label = FALSE
+)
 }
 \arguments{
 \item{choices}{A matrix of responses to multiple-choice items: persons as

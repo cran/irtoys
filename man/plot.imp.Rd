@@ -4,8 +4,16 @@
 \alias{plot.imp}
 \title{A plot method for the interaction model}
 \usage{
-\method{plot}{imp}(x, items = NULL, shade = 10, highlight = -Inf,
-  add = FALSE, main = "Item-total regression", label = FALSE, ...)
+\method{plot}{imp}(
+  x,
+  items = NULL,
+  shade = 10,
+  highlight = -Inf,
+  add = FALSE,
+  main = "Item-total regression",
+  label = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{An object produced by function \code{interactionModel}}

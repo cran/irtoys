@@ -4,9 +4,22 @@
 \alias{itf}
 \title{Test item fit}
 \usage{
-itf(resp, ip, item, stat = "lr", theta, standardize = TRUE, mu = 0,
-  sigma = 1, bins = 9, breaks = NULL, equal = "count", type = "means",
-  do.plot = TRUE, main = "Item fit")
+itf(
+  resp,
+  ip,
+  item,
+  stat = "lr",
+  theta,
+  standardize = TRUE,
+  mu = 0,
+  sigma = 1,
+  bins = 9,
+  breaks = NULL,
+  equal = "count",
+  type = "means",
+  do.plot = TRUE,
+  main = "Item fit"
+)
 }
 \arguments{
 \item{resp}{A matrix of responses: persons as rows, items as columns,
@@ -92,7 +105,7 @@ ability itself. \code{irtoys} allows use of any suitable ability measure
 via the argument \code{theta}. If \code{theta} is not specified, \code{itf} 
 will compute EAP estimates of ability, group them in 9 groups having 
 approximately the same number of cases, and use the means of the ability
-eatimates in each group. This is the approximate behaviour of BILOG.
+eatimates in each group. This is the approximate behaviour of BILOG. 
 
 If the test has less than 20 items, \code{itf} will issue a warning.
 For tests of 10 items or less, BILOG has a special statistic of fit, which

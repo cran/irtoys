@@ -4,8 +4,14 @@
 \alias{irfPlot}
 \title{Item fit plot}
 \usage{
-irfPlot(resp, ip, x = NULL, item,
-  main = "Parametric vs non-parametric trace line", use.sm = FALSE)
+irfPlot(
+  resp,
+  ip,
+  x = NULL,
+  item,
+  main = "Parametric vs non-parametric trace line",
+  use.sm = FALSE
+)
 }
 \arguments{
 \item{resp}{A matrix of responses: persons as rows, items as columns,

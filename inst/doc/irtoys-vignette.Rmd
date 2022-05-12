@@ -5,7 +5,7 @@ date: "`r Sys.Date()`"
 bibliography: irtoys.bib
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Round about irtoys}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

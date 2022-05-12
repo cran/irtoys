@@ -209,9 +209,9 @@ est.ltm = function(resp, model, omitsWrong, nqp, rasch) {
 #' 
 #' \code{est} only works when some IRT software is installed.  Package
 #' \code{ltm} is automatically loaded. ICL can be downloaded from
-#' \url{www.b-a-h.com}. Alternative links are provided in the help screen for 
-#' this package. BILOG is commercial software sold by SSI --- see
-#' \url{www.ssicentral.com} for further detail.  On Windows, make sure that the
+#' \url{http://www.openirt.com/b-a-h/software/}. 
+#' BILOG is commercial software sold by SSI --- see
+#' \url{https://ssicentral.com/} for further detail.  On Windows, make sure that the
 #' executable files (\code{icl.exe} for ICL, \code{blm1.exe}, \code{blm2.exe},
 #' and \code{blm3.exe}, for BILOG) are located in directories that are included
 #' in the PATH variable.
@@ -259,15 +259,6 @@ est.ltm = function(resp, model, omitsWrong, nqp, rasch) {
 #' When ICL is used as estimation engine, \code{se} and \code{vcm} are NULL as ICL does not
 #' compute standard errors for the item parameter estimates.
 #' @author Ivailo Partchev
-#' @references Bradley A. Hanson (2002), ICL: IRT Command Language.
-#' \url{www.b-a-h.com}
-#' 
-#' Dimitris Rizopoulos (2006). ltm: Latent Trait Models under IRT.
-#' \url{cran.r-project.org}
-#' 
-#' M. F. Zimowski, E. Muraki, R. J. Mislevy and R. D. Bock (1996), BILOG--MG.
-#' Multiple-Group IRT Analysis and Test Maintenance for Binary Items, SSI
-#' Scientific Software International, Chicago, IL.  \url{www.ssicentral.com}
 #' @keywords models
 #' 
 #' @examples

@@ -4,8 +4,7 @@
 \alias{plot.trf}
 \title{A plot method for test response functions}
 \usage{
-\method{plot}{trf}(x, add = FALSE, main = "Test response function",
-  co = 1, ...)
+\method{plot}{trf}(x, add = FALSE, main = "Test response function", co = 1, ...)
 }
 \arguments{
 \item{x}{An object produced by function \code{trf}}

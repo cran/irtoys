@@ -4,7 +4,9 @@
 \name{b1}
 \alias{b1}
 \title{Example item parameters 1PL (Bilog)}
-\format{The object returned by \code{est}}
+\format{
+The object returned by \code{est}
+}
 \description{
 Item parameter estimates for the 1PL model, estimated with \code{bilog} from
 the example data set \code{Scored}. These are provided because not users will

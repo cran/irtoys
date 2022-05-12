@@ -40,19 +40,15 @@ the syntax of their program of choice.
 
 To take full advantage of \code{irtoys}, some IRT software is needed.
 Package \code{ltm} is automatically loaded.  ICL by Brad Hanson can be
-downloaded from his site, \url{www.b-a-h.com}: executables are provided for
-Windows, Linux, and Macintosh. Because of the technical problems 
-occasionally encountered with this site, I have set up an alternative
-source:
+downloaded from his site, \url{http://www.openirt.com/b-a-h/software/}.
+Executables and a very detailed manual (not needed to use ICL with 
+\code{irtoys} are provided for Windows, Linux, and Macintosh. The Mac
+version probably does not work with the current OS versions but I still
+use the Windows and Linux versions without any problem.
 
-For Linux: \url{https://www.dropbox.com/s/ks72ow7aznmasqd/icl_linux.tar.gz?dl=0}
-
-For Windows: \url{https://www.dropbox.com/s/783ka4q3ifkh4ir/icl_win.zip?dl=0}
-
-For Macintosh: \url{https://www.dropbox.com/s/z9kji73r59m4pbf/icl_mac.sea.bin?dl=0}
 
 BILOG is commercial software sold by SSI ---
-see \url{www.ssicentral.com} for further detail.
+see \url{https://ssicentral.com/} for further detail.
 
 On Windows, make sure that the executable files (\code{icl.exe} for ICL,
 \code{BLM1.EXE}, \code{BLM2.EXE}, and \code{BLM3.EXE} for BILOG) are located
@@ -70,7 +66,7 @@ in a similar format, and \code{vcm} contains the variance-covariance matrices
 (NULL when using ICL). When passing item parameters to another function that
 only needs the estimates, \code{irf(ip)} and 
 \code{irf(ip$est)} can be used interchangeably. This facilitates using simulated
-item parameters. A function that does require the complete object is \code{}.
+item parameters. A function that does require the complete object is \code{}. 
 
 Also, function \code{itf} now returns item fit statistics 
 as a vector rather than a list. Finally, since most of the functions in \code{irtoys}

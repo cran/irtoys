@@ -4,8 +4,7 @@
 \alias{plot.tif}
 \title{A plot method for test information functions}
 \usage{
-\method{plot}{tif}(x, add = FALSE, main = "Test information function",
-  co = 1, ...)
+\method{plot}{tif}(x, add = FALSE, main = "Test information function", co = 1, ...)
 }
 \arguments{
 \item{x}{An object produced by function \code{tif}}

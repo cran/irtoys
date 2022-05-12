@@ -4,7 +4,9 @@
 \name{b2}
 \alias{b2}
 \title{Example item parameters 2PL (Bilog)}
-\format{The object returned by \code{est}}
+\format{
+The object returned by \code{est}
+}
 \description{
 Item parameter estimates for the 2PL model, estimated with \code{bilog} from
 the example data set \code{Scored}. These are provided because not users will

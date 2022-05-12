@@ -4,8 +4,14 @@
 \alias{plot.irf}
 \title{A plot method for item response functions}
 \usage{
-\method{plot}{irf}(x, add = FALSE, main = "Item response function",
-  co = 1, label = FALSE, ...)
+\method{plot}{irf}(
+  x,
+  add = FALSE,
+  main = "Item response function",
+  co = 1,
+  label = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{An object produced by function \code{irf}}

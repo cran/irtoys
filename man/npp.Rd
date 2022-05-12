@@ -4,9 +4,18 @@
 \alias{npp}
 \title{Non-parametric characteristic curves}
 \usage{
-npp(resp, x, items, from = -4, to = 4, co = 1,
-  main = "Non-parametric response function", add = FALSE, bands = FALSE,
-  label = FALSE)
+npp(
+  resp,
+  x,
+  items,
+  from = -4,
+  to = 4,
+  co = 1,
+  main = "Non-parametric response function",
+  add = FALSE,
+  bands = FALSE,
+  label = FALSE
+)
 }
 \arguments{
 \item{resp}{A matrix of responses: persons as rows, items as columns,

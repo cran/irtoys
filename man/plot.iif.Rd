@@ -4,8 +4,14 @@
 \alias{plot.iif}
 \title{A plot method for item information functions}
 \usage{
-\method{plot}{iif}(x, add = FALSE, main = "Item information function",
-  co = 1, label = FALSE, ...)
+\method{plot}{iif}(
+  x,
+  add = FALSE,
+  main = "Item information function",
+  co = 1,
+  label = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{An object produced by function \code{iif}}

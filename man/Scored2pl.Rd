@@ -4,7 +4,9 @@
 \name{Scored2pl}
 \alias{Scored2pl}
 \title{Example item parameters}
-\format{The object returned by \code{est}}
+\format{
+The object returned by \code{est}
+}
 \description{
 Item parameter estimates for the 2PL model, estimated with \code{ltm} from
 the example data set \code{Scored}. These are provided as a check, and to
